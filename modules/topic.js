@@ -41,7 +41,7 @@ module.exports = function topic() {
     topic.id_user = params.id_user
     topic.date = new Date()
 
-    topic.save$(function (err, obj) {
+    topic.save$(function(err, obj) {
       respond(err, obj)
     })
   })
@@ -64,6 +64,19 @@ module.exports = function topic() {
       }, (err, user) => {
 
         if (user.isAdm || topic.id_user == user.id) {
+
+          // removing messages
+          this.act('role:message,cmd:all', {
+            id_topic: topic.id
+          }, (err, messages) => {
+            messages.forEach(message => {
+              message.remove$((err) => {
+                return respond(err)
+              })
+            })
+          })
+
+          // removing topic
           this.make('topic').remove$(topic.id, (err) => {
             return respond(err)
           })

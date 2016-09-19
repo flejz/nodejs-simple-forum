@@ -1,4 +1,4 @@
-const assert = require('assert');
+const assert = require('assert')
 const seneca = require('seneca')({
     log: 'silent'
   })
@@ -12,7 +12,7 @@ before((done) => {
   mock.it().then(() => {
     done()
   })
-});
+})
 
 describe('When request an user by id', () => {
   it('should return the register', (done) => {
@@ -73,8 +73,8 @@ describe('When an user tries to register', () => {
 
           seneca.act('role:user,cmd:add', {
             name: 'Jaime',
-            username: 'jaimelopesflores',
-            password: 'jaime',
+            username: 'devandroll',
+            password: 'devandroll',
             passwordMatch: 'jaime',
             isAdm: true
           }, (err, user) => {
@@ -145,8 +145,8 @@ describe('When an user tries to login', () => {
     it('should return the user register', (done) => {
 
       seneca.act('role:user,cmd:login', {
-        username: 'jaimelopesflores',
-        password: 'jaime'
+        username: 'devandroll',
+        password: 'dev'
       }, (err, user) => {
 
         if (err)

@@ -12,6 +12,10 @@ block content
           h3.panel-title 
             strong 
               a(href="/topic/#{topics[i].id}") #{topics[i].title}
+            - if(topics[i].canDelete){
+              form(action="/topic/#{topics[i].id}/del", method='post', style='display:inline; margin-left:20px')
+                button.btn.btn-danger Del
+            - }
             span(style="float:right") #{new Date(topics[i].date).toLocaleDateString()} - #{new Date(topics[i].date).toLocaleTimeString()}
         .panel-body #{topics[i].description}
     - }

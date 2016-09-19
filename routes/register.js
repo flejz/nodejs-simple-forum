@@ -28,11 +28,10 @@ module.exports = function (seneca) {
         else
           res.render('error', err)
       }
-
       req.session.loggedUser = user
       res.redirect('/')
     })
   })
 
-  return router;
+  return router
 }

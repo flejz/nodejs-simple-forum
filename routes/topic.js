@@ -1,16 +1,16 @@
-module.exports = function (seneca) {
+module.exports = function(seneca) {
 
   const router = require('express').Router()
   const auth = require('../modules/auth')
 
-  router.get('/new', auth, function (req, res) {
+  router.get('/new', auth, function(req, res) {
     res.render('topic/new', {
       title: 'New Topic',
       logged: true
     })
   })
 
-  router.get('/:id', auth, function (req, res) {
+  router.get('/:id', auth, function(req, res) {
 
     seneca.act('role:topic,cmd:get', {
       id: req.params.id
@@ -26,17 +26,25 @@ module.exports = function (seneca) {
         if (err) {
           res.render('error', err)
         }
+
+        var user = req.session.loggedUser
+
+        for (var i in messages) {
+          messages[i].canDelete = user.isAdm || user.id ==
+            messages[i].id_user
+        }
+
         res.render('topic/view', {
           title: 'Topic',
           topic: topic,
           messages: messages,
-          logged:true
+          logged: true
         })
       })
     })
   })
 
-  router.post('/add', auth, function (req, res, next) {
+  router.post('/add', auth, function(req, res, next) {
 
     seneca.act('role:topic,cmd:add', {
       title: req.body.title,
@@ -57,7 +65,7 @@ module.exports = function (seneca) {
       }, (err, message) => {
 
         if (err) {
-          res.render('error', err)
+          return res.render('error', err)
         }
 
         res.redirect('/')
@@ -66,15 +74,28 @@ module.exports = function (seneca) {
     })
   })
 
-  router.get('/:id/message', auth, function (req, res) {
+  router.post('/:id/del', auth, function(req, res) {
 
-    res.render('message/new', {
-      title: 'Message - Comment',
-      logged:true
+    seneca.act('role:topic,cmd:del', {
+      id: req.params.id,
+      id_user: req.session.loggedUser.id
+    }, err => {
+      if (err) {
+        return res.render('error', err)
+      }
+      res.redirect('/')
     })
   })
 
-  router.post('/:id/message', auth, function (req, res) {
+  router.get('/:id/message', auth, function(req, res) {
+
+    res.render('message/new', {
+      title: 'Message - Comment',
+      logged: true
+    })
+  })
+
+  router.post('/:id/message', auth, function(req, res) {
 
     seneca.act('role:message,cmd:add', {
       title: req.body.title,
@@ -91,5 +112,18 @@ module.exports = function (seneca) {
     })
   })
 
-  return router;
+  router.post('/:id/message/:mid/del', auth, function(req, res) {
+
+    seneca.act('role:message,cmd:del', {
+      id: req.params.mid,
+      id_user: req.session.loggedUser.id
+    }, err => {
+      if (err) {
+        return res.render('error', err)
+      }
+      res.redirect('/topic/' + req.params.id)
+    })
+  })
+
+  return router
 }

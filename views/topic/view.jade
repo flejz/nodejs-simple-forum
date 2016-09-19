@@ -4,6 +4,10 @@ block content
 
   h2= topic.title  
     a(href="/topic/#{topic.id}/message", style="float:right").btn.btn-primary New Message
+    - if (topic.canDelete) {
+      form(method='del')
+        button(href="/topic/#{topic.id}/message", style="float:right").btn.btn-danger Delete
+    - }
   h5= topic.description
     
   - for (var i in messages) {
@@ -18,6 +22,10 @@ block content
         .panel-heading
           h3.panel-title= messages[i].title
             span(style="float:right") #{new Date(messages[i].date).toLocaleDateString()} - #{new Date(messages[i].date).toLocaleTimeString()}
+            - if(messages[i].canDelete){
+              form(action="/topic/#{topic.id}/message/#{messages[i].id}/del", method='post', style='display:inline; margin-left:20px')
+                button.btn.btn-danger Del
+            - }
         .panel-body= messages[i].description
     - }
       

@@ -34,5 +34,5 @@ module.exports = function (seneca) {
     })
   })
 
-  return router;
+  return router
 }

@@ -1,4 +1,4 @@
-const assert = require('assert');
+const assert = require('assert')
 const seneca = require('seneca')({
     log: 'silent'
   })
@@ -20,56 +20,8 @@ before((done) => {
       })
     })
   })
-});
-
-describe('When an user tries to delete a topic', () => {
-  describe('And the topic is not from himself', () => {
-    it('should return an exception', (done) => {
-
-      seneca.act('role:topic,cmd:del', {
-        id: '1',
-        id_user: 'she'
-      }, (err, topic) => {
-
-        if (err)
-          return done()
-
-        done(new Error('Did not return an error'))
-      })
-    })
-  })
-  describe('And the topic is from himself', () => {
-    it('should delete the topic', (done) => {
-
-      seneca.act('role:topic,cmd:del', {
-        id: '3',
-        id_user: 'he'
-      }, (err, topic) => {
-
-        if (err)
-          return done(err)
-
-        done()
-      })
-    })
-  })
 })
 
-describe('When an adm tries to delete a topic', () => {
-  it('should delete the topic', (done) => {
-
-    seneca.act('role:topic,cmd:del', {
-      id: '2',
-      id_user: 'me'
-    }, (err, topic) => {
-
-      if (err)
-        return done(err)
-
-      done()
-    })
-  })
-})
 
 describe('When an user tries to delete a message', () => {
   describe('And the message is not from himself', () => {
@@ -111,6 +63,56 @@ describe('When an adm tries to delete a message', () => {
       id: '2',
       id_user: 'me'
     }, (err, message) => {
+
+      if (err)
+        return done(err)
+
+      done()
+    })
+  })
+})
+
+
+describe('When an user tries to delete a topic', () => {
+  describe('And the topic is not from himself', () => {
+    it('should return an exception', (done) => {
+
+      seneca.act('role:topic,cmd:del', {
+        id: '1',
+        id_user: 'she'
+      }, (err, topic) => {
+
+        if (err)
+          return done()
+
+        done(new Error('Did not return an error'))
+      })
+    })
+  })
+  describe('And the topic is from himself', () => {
+    it('should delete the topic', (done) => {
+
+      seneca.act('role:topic,cmd:del', {
+        id: '3',
+        id_user: 'he'
+      }, (err, topic) => {
+
+        if (err)
+          return done(err)
+
+        done()
+      })
+    })
+  })
+})
+
+describe('When an adm tries to delete a topic', () => {
+  it('should delete the topic', (done) => {
+
+    seneca.act('role:topic,cmd:del', {
+      id: '2',
+      id_user: 'me'
+    }, (err, topic) => {
 
       if (err)
         return done(err)

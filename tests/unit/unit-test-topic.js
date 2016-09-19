@@ -1,4 +1,4 @@
-const assert = require('assert');
+const assert = require('assert')
 const seneca = require('seneca')({
     log: 'silent'
   })
@@ -12,7 +12,7 @@ before((done) => {
   mock.it().then(() => {
     done()
   })
-});
+})
 
 describe('When requesting all the topics', () => {
   it('should retrieve a list of all the topics ordered by date', (done) => {
