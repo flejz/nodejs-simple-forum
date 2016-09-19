@@ -5,7 +5,7 @@ module.exports = function topic() {
 
     this.make('topic').list$({
       sort$: {
-        date: 1
+        date: -1
       }
     }, (err, data) => {
       return respond(err, data)

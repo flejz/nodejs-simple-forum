@@ -1,5 +1,18 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  
+  - if (logged) {
+    h2 List of Topics
+      a(href="/topic/new", style="float:right").btn.btn-primary New Topic
+    
+    - for(var i in topics) {
+      .panel.panel-default
+        .panel-heading
+          h3.panel-title 
+            strong 
+              a(href="/topic/#{topics[i].id}") #{topics[i].title}
+            span(style="float:right") #{new Date(topics[i].date).toLocaleDateString()} - #{new Date(topics[i].date).toLocaleTimeString()}
+        .panel-body #{topics[i].description}
+    - }
+  - }

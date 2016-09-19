@@ -4,8 +4,8 @@ module.exports = function(seneca) {
   var users = [{
     name: 'Jaime Flores',
     id: 'me',
-    username: 'jaimelopesflores',
-    password: 'jaime',
+    username: 'j',
+    password: 'j',
     isAdm: true
   }, {
     id: 'she',

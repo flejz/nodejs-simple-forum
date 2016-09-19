@@ -1,0 +1,24 @@
+extends ../layout
+
+block content
+
+  h2= topic.title  
+    a(href="/topic/#{topic.id}/message", style="float:right").btn.btn-primary New Message
+  h5= topic.description
+    
+  - for (var i in messages) {
+    - if (messages[i].main_message) {
+      .panel.panel-primary
+        .panel-heading
+          h3.panel-title= messages[i].title
+            span(style="float:right") #{new Date(messages[i].date).toLocaleDateString()} - #{new Date(messages[i].date).toLocaleTimeString()}
+        .panel-body= messages[i].description
+    - } else {
+      .panel.panel-default
+        .panel-heading
+          h3.panel-title= messages[i].title
+            span(style="float:right") #{new Date(messages[i].date).toLocaleDateString()} - #{new Date(messages[i].date).toLocaleTimeString()}
+        .panel-body= messages[i].description
+    - }
+      
+  - }

@@ -1,9 +1,27 @@
-var express = require('express');
-var router = express.Router();
+module.exports = function (seneca) {
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+  const router = require('express').Router()
+  const auth = require('../modules/auth')
 
-module.exports = router;
+  router.get('/', function (req, res) {
+
+    if (!req.session || !req.session.loggedUser) {
+
+      return res.render('index', {
+        title: 'Home',
+        logged: false
+      })
+    }
+
+    seneca.act('role:topic,cmd:all', (err, topics) => {
+
+      res.render('index', {
+        title: 'Topics',
+        logged: true,
+        topics: topics
+      })
+    })
+  })
+
+  return router;
+}

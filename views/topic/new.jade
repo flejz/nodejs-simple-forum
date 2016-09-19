@@ -1,0 +1,16 @@
+extends ../layout
+
+block content
+  
+  form(action="/topic/add",method="post")
+  
+    .form-group  
+      label Title:
+      input.form-control(type='text', placeholder='Title', name="title", required)
+    .form-group  
+      label Description:
+      input.form-control(type='text', placeholder='Description', name="description", required)        
+    .form-group  
+      label Message:
+      input.form-control(type='text', placeholder='Message', name="message", required)
+    button.btn.btn-primary(type='submit') Add
