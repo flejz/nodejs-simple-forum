@@ -9,7 +9,6 @@ module.exports = function message() {
     this.make('message').list$({
       id_topic: params.id_topic,
       sort$: {
-        main_message: -1,
         date: 1
       }
     }, (err, data) => {

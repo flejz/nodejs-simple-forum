@@ -16,7 +16,10 @@ block content
               form(action="/topic/#{topics[i].id}/del", method='post', style='display:inline; margin-left:20px')
                 button.btn.btn-danger Del
             - }
-            span(style="float:right") #{new Date(topics[i].date).toLocaleDateString()} - #{new Date(topics[i].date).toLocaleTimeString()}
+            strong(style="float:right") #{new Date(topics[i].date).toLocaleDateString()} - #{new Date(topics[i].date).toLocaleTimeString()}
+            i(style="float:right; margin-right: 10px") (user: #{topics[i].id_user}) 
         .panel-body #{topics[i].description}
     - }
+  - } else {
+    h1 Log in to see the Topics
   - }

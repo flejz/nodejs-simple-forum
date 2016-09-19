@@ -6,7 +6,8 @@ module.exports = function(seneca) {
   router.get('/new', auth, function(req, res) {
     res.render('topic/new', {
       title: 'New Topic',
-      logged: true
+      logged: true,
+      user: req.session.loggedUser
     })
   })
 
@@ -38,7 +39,8 @@ module.exports = function(seneca) {
           title: 'Topic',
           topic: topic,
           messages: messages,
-          logged: true
+          logged: true,
+          user: user
         })
       })
     })
@@ -91,7 +93,8 @@ module.exports = function(seneca) {
 
     res.render('message/new', {
       title: 'Message - Comment',
-      logged: true
+      logged: true,
+      user: req.session.loggedUser
     })
   })
 

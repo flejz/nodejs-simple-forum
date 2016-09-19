@@ -8,13 +8,6 @@ module.exports = function(seneca) {
     id_user: 'me',
     id_topic: '1',
     main_message: true
-  },{
-    id: '1-2',
-    title: '2 - Message Node.js',
-    description: '2 - Express Jade',
-    id_user: 'me',
-    id_topic: '1',
-    main_message: false
   }, {
     id: '2',
     title: 'Message Python',

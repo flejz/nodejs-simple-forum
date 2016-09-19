@@ -78,8 +78,8 @@ app.use(function(err, req, res, next) {
 // Exporting module
 module.exports = app
 
-// Mocks data if mongo url is not defined
-if (config.mongoUrl == '') {
+// Mocks data or connect to mongo
+if (config.mockData) {
   const mockUser = require('./tests/mock/mock-user')(seneca)
   const mockTopic = require('./tests/mock/mock-topic')(seneca)
   const mockMessages = require('./tests/mock/mock-message')(seneca)

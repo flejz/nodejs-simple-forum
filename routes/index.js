@@ -21,10 +21,11 @@ module.exports = function(seneca) {
         topics[i].canDelete = user.isAdm || user.id == topics[i].id_user
       }
 
-      res.render('index', {
+      return res.render('index', {
         title: 'Topics',
         logged: true,
-        topics: topics
+        topics: topics,
+        user: user
       })
     })
   })

@@ -15,13 +15,15 @@ block content
       .panel.panel-primary
         .panel-heading
           h3.panel-title= messages[i].title
-            span(style="float:right") #{new Date(messages[i].date).toLocaleDateString()} - #{new Date(messages[i].date).toLocaleTimeString()}
+            strong(style="float:right") #{new Date(messages[i].date).toLocaleDateString()} - #{new Date(messages[i].date).toLocaleTimeString()}
+            i(style="float:right; margin-right: 10px") (user: #{messages[i].id_user}) 
         .panel-body= messages[i].description
     - } else {
       .panel.panel-default
         .panel-heading
           h3.panel-title= messages[i].title
-            span(style="float:right") #{new Date(messages[i].date).toLocaleDateString()} - #{new Date(messages[i].date).toLocaleTimeString()}
+            strong(style="float:right") #{new Date(messages[i].date).toLocaleDateString()} - #{new Date(messages[i].date).toLocaleTimeString()}
+            i(style="float:right; margin-right: 10px") (user: #{messages[i].id_user}) 
             - if(messages[i].canDelete){
               form(action="/topic/#{topic.id}/message/#{messages[i].id}/del", method='post', style='display:inline; margin-left:20px')
                 button.btn.btn-danger Del
