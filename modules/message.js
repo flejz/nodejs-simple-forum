@@ -1,7 +1,11 @@
 module.exports = function message() {
 
-  // Get all messages by topic
-  this.add('role:message,cmd:all', (params, respond) => {
+
+  /**
+   * Gets all messages by topic
+   * @param title: The topic id
+   */
+  this.add('role:message,cmd:by_topic', (params, respond) => {
     if (!params.id_topic) {
       return respond(new Error('Params are empty'))
     }
@@ -16,7 +20,10 @@ module.exports = function message() {
     })
   })
 
-  // Gets message
+  /**
+   * Gets a message by id
+   * @param title: The id
+   */
   this.add('role:message,cmd:get', (params, respond) => {
 
     if (!params.id) {
@@ -29,7 +36,13 @@ module.exports = function message() {
     })
   })
 
-  // Add user
+  /**
+   * Adds a new message
+   * @param title: The title
+   * @param description: The description
+   * @param id_user: The user id
+   * @param id_topic: The topic id
+   */
   this.add('role:message,cmd:add', (params, respond) => {
 
     if (params.title == undefined || params.title == '' ||
@@ -50,12 +63,17 @@ module.exports = function message() {
     message.main_message = params.main_message
     message.date = new Date()
 
-    message.save$(function (err, obj) {
+    message.save$(function(err, obj) {
       respond(err, obj)
     })
   })
 
-  // Deletes
+
+  /**
+   * Deletes a message
+   * @param id: The message id
+   * @param id_user: The user id
+   */
   this.add('role:message,cmd:del', (params, respond) => {
 
     if (params.id == undefined || params.id == '' ||
@@ -64,13 +82,24 @@ module.exports = function message() {
       return respond(new Error('Incomplete params'))
     }
 
-    this.act('role:message,cmd:get', {
-      id: params.id
-    }, (err, message) => {
+    this.act('role:user,cmd:get', {
+      id: params.id_user
+    }, (err, user) => {
 
-      this.act('role:user,cmd:get', {
-        id: params.id_user
-      }, (err, user) => {
+      if (err || !user) {
+        return respond(err || new Error('User not found'))
+      }
+
+      this.act('role:message,cmd:get', {
+        id: params.id
+      }, (err, message) => {
+
+        if (err || !message) {
+          return respond(err || new Error('Message not found'))
+        } else if (!user.isAdm && topic.id_user != user.id) {
+          return respond(new Error(
+            'User can not delete this message'))
+        }
 
         if (user.isAdm || message.id_user == user.id) {
           this.make('message').remove$(message.id, (err) => {

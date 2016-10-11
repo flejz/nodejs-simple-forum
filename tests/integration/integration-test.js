@@ -1,4 +1,4 @@
-const assert = require('assert')
+const assert = require('chai').assert
 const seneca = require('seneca')({
     log: 'silent'
   })
@@ -97,6 +97,8 @@ describe('When an user tries to delete a topic', () => {
         id_user: 'he'
       }, (err, topic) => {
 
+        console.log(err);
+
         if (err)
           return done(err)
 
@@ -113,6 +115,9 @@ describe('When an adm tries to delete a topic', () => {
       id: '2',
       id_user: 'me'
     }, (err, topic) => {
+
+
+              console.log(err);
 
       if (err)
         return done(err)

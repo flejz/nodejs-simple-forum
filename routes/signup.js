@@ -1,23 +1,21 @@
-module.exports = function (seneca) {
+module.exports = function(seneca) {
+  'use strict'
 
   const router = require('express').Router()
-  const auth = require('../modules/auth')
 
-  router.get('/', function (req, res) {
-    res.render('register', {
-      title: 'Register',
-      isRegistering: true
-    })
-  })
-
-  router.post('/', function (req, res, next) {
+  /**
+   * Signs up a new user
+   * @route signup/
+   */
+  router.post('/', function(req, res, next) {
 
     seneca.act('role:user,cmd:add', {
       name: req.body.name,
       username: req.body.username,
       password: req.body.password,
       passwordMatch: req.body.passwordMatch,
-      isAdm: req.body.isAdm != undefined && req.body.isAdm === 'on' ? true : false
+      isAdm: req.body.isAdm != undefined && req.body.isAdm === 'on' ?
+        true : false
     }, (err, user) => {
 
       if (err) {

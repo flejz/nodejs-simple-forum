@@ -1,132 +1,149 @@
 module.exports = function(seneca) {
+  'use strict'
 
   const router = require('express').Router()
-  const auth = require('../modules/auth')
+  const auth = require('../app.auth')(seneca)
+  const error = require('../app.error')()
 
-  router.get('/new', auth, function(req, res) {
-    res.render('topic/new', {
-      title: 'New Topic',
-      logged: true,
-      user: req.session.loggedUser
-    })
-  })
+  /**
+   * Gets all topics
+   * @route GET topic/
+   */
+  router.get('/',
+    auth.parseHeader,
+    auth.parseToken,
+    function(req, res) {
 
-  router.get('/:id', auth, function(req, res) {
+      // Gets all the topics
+      seneca.act('role:topic,cmd:all', (err, topics) => {
 
-    seneca.act('role:topic,cmd:get', {
-      id: req.params.id
-    }, (err, topic) => {
+        topics.forEach(topic => {
+          topic.canDelete = req.user.isAdm || req.user.id == topic.id_user
+        })
 
-      if (err) {
-        res.render('error', err)
-      }
-      seneca.act('role:message,cmd:all', {
-        id_topic: topic.id
-      }, (err, messages) => {
-
-        if (err) {
-          res.render('error', err)
-        }
-
-        var user = req.session.loggedUser
-
-        for (var i in messages) {
-          messages[i].canDelete = user.isAdm || user.id ==
-            messages[i].id_user
-        }
-
-        res.render('topic/view', {
-          title: 'Topic',
-          topic: topic,
-          messages: messages,
-          logged: true,
-          user: user
+        return res.json({
+          result: topics
         })
       })
     })
-  })
 
-  router.post('/add', auth, function(req, res, next) {
+  /**
+   * Inserts a new topic
+   * @route POST topic/
+   */
+  router.post('/',
+    auth.parseHeader,
+    auth.parseToken,
+    function(req, res) {
 
-    seneca.act('role:topic,cmd:add', {
-      title: req.body.title,
-      description: req.body.description,
-      id_user: req.session.loggedUser.id
-    }, (err, topic) => {
-
-      if (err) {
-        res.render('error', err)
-      }
-
-      seneca.act('role:message,cmd:add', {
+      // Adds the topic
+      seneca.act('role:topic,cmd:add', {
         title: req.body.title,
-        description: req.body.message,
-        id_user: req.session.loggedUser.id,
-        id_topic: topic.id,
-        main_message: true
-      }, (err, message) => {
+        description: req.body.description,
+        id_user: req.user.id
+      }, (err, topic) => {
 
         if (err) {
-          return res.render('error', err)
+          return error.handle(res, err)
         }
 
-        res.redirect('/')
+        // Adds the message
+        seneca.act('role:message,cmd:add', {
+          title: req.body.title,
+          description: req.body.message,
+          id_user: req.user.id,
+          id_topic: topic.id,
+          main_message: true
+        }, (err, message) => {
+
+          // If any error occurs adding the message,
+          // then deletes the topic
+          if (err) {
+
+            seneca.act('role:topic,cmd:del', {
+              id: topic.id,
+              id_user: req.user.id
+            })
+
+            return error.handle(res, err)
+          }
+
+          res.json({
+            result: topic
+          })
+        })
+
       })
-
     })
-  })
 
-  router.post('/:id/del', auth, function(req, res) {
+  /**
+   * Gets a specific topic by id
+   * @route GET topic/ID
+   */
+  router.get('/:id',
+    auth.parseHeader,
+    auth.parseToken,
+    function(req, res) {
 
-    seneca.act('role:topic,cmd:del', {
-      id: req.params.id,
-      id_user: req.session.loggedUser.id
-    }, err => {
-      if (err) {
-        return res.render('error', err)
-      }
-      res.redirect('/')
+      seneca.act('role:topic,cmd:get', {
+        id: req.params.id
+      }, (err, topic) => {
+
+        if (err || !topic) {
+          return error.handle(res, err || {
+            message: "Topic not found"
+          }, err ? 500 : 404)
+        }
+
+        seneca.act('role:message,cmd:all', {
+          id_topic: topic.id
+        }, (err, messages) => {
+
+          if (err) {
+            return error.handle(res, err)
+          }
+
+          let user = req.user
+
+          topic.canDelete = user.isAdm || user.id == topic.id_user
+          topic.messages = messages
+          topic.messages.forEach(message => {
+            messages.canDelete = user.isAdm || user.id ==
+              message.id_user
+          })
+
+          return res.json({
+            result: topic
+          })
+        })
+      })
     })
-  })
 
-  router.get('/:id/message', auth, function(req, res) {
+  /**
+   * Deletes a specific topic by id
+   * @route DELETE topic/ID
+   */
+  router.delete('/:id',
+    auth.parseHeader,
+    auth.parseToken,
+    function(req, res) {
 
-    res.render('message/new', {
-      title: 'Message - Comment',
-      logged: true,
-      user: req.session.loggedUser
+      seneca.act('role:topic,cmd:del', {
+        id: req.params.id,
+        id_user: req.user.id
+      }, err => {
+
+        if (err) {
+          return error.handle(res, err)
+        }
+
+        return res.json({
+          result: {
+            success: true
+          }
+        })
+      })
     })
-  })
-
-  router.post('/:id/message', auth, function(req, res) {
-
-    seneca.act('role:message,cmd:add', {
-      title: req.body.title,
-      description: req.body.description,
-      id_user: req.session.loggedUser.id,
-      id_topic: req.params.id
-    }, (err, message) => {
-
-      if (err) {
-        return res.render('error', err)
-      }
-
-      res.redirect('/topic/' + req.params.id)
-    })
-  })
-
-  router.post('/:id/message/:mid/del', auth, function(req, res) {
-
-    seneca.act('role:message,cmd:del', {
-      id: req.params.mid,
-      id_user: req.session.loggedUser.id
-    }, err => {
-      if (err) {
-        return res.render('error', err)
-      }
-      res.redirect('/topic/' + req.params.id)
-    })
-  })
 
   return router
 }

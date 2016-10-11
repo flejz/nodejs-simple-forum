@@ -1,6 +1,9 @@
 module.exports = function topic() {
+  'use strict'
 
-  // Get all the topics
+  /**
+   * Gets all topics date ordered
+   */
   this.add('role:topic,cmd:all', (data, respond) => {
 
     this.make('topic').list$({
@@ -12,7 +15,10 @@ module.exports = function topic() {
     })
   })
 
-  // Gets topic
+  /**
+   * Gets the topic by id
+   * @param id: The topic id
+   */
   this.add('role:topic,cmd:get', (params, respond) => {
 
     if (!params.id) {
@@ -25,12 +31,17 @@ module.exports = function topic() {
     })
   })
 
-  // Add user
+  /**
+   * Adds a new topic
+   * @param title: The topic title
+   * @param description: The topic description
+   * @param id_user: The topic user id
+   */
   this.add('role:topic,cmd:add', (params, respond) => {
 
-    if (params.title == undefined || params.title == '' ||
-      params.description == undefined || params.description == '' ||
-      params.id_user == undefined || params.id_user == '') {
+    if (!params.title || params.title == '' ||
+      !params.description || params.description == '' ||
+      !params.id_user || params.id_user == '') {
 
       return respond(new Error('Incomplete params'))
     }
@@ -46,7 +57,11 @@ module.exports = function topic() {
     })
   })
 
-  // Deletes
+  /**
+   * Deletes a topic
+   * @param id: The topic id
+   * @param id_user: The user id
+   */
   this.add('role:topic,cmd:del', (params, respond) => {
 
     if (params.id == undefined || params.id == '' ||
@@ -55,38 +70,55 @@ module.exports = function topic() {
       return respond(new Error('Incomplete params'))
     }
 
-    this.act('role:topic,cmd:get', {
-      id: params.id
-    }, (err, topic) => {
+    // Gets the user
+    this.act('role:user,cmd:get', {
+      id: params.id_user
+    }, (err, user) => {
 
-      this.act('role:user,cmd:get', {
-        id: params.id_user
-      }, (err, user) => {
+      if (err || !user) {
+        return respond(err || new Error('User not found'))
+      }
 
-        if (user.isAdm || topic.id_user == user.id) {
+      // Gets the topic
+      this.act('role:topic,cmd:get', {
+        id: params.id
+      }, (err, topic) => {
 
-          // removing messages
-          this.act('role:message,cmd:all', {
-            id_topic: topic.id
-          }, (err, messages) => {
-            messages.forEach(message => {
-              message.remove$((err) => {
-                return respond(err)
-              })
-            })
-          })
-
-          // removing topic
-          this.make('topic').remove$(topic.id, (err) => {
-            return respond(err)
-          })
-        } else {
+        if (err || !topic) {
+          return respond(err || new Error('Topic not found'))
+        } else if (!user.isAdm && topic.id_user != user.id) {
           return respond(new Error(
-            'User can not delete this register'))
+            'User can not delete this topic'))
         }
 
+        // Gets the messages
+        this.act('role:message,cmd:by_topic', {
+          id_topic: topic.id
+        }, (err, messages) => {
+
+          // reduce the array o the canDelete variable
+          let canDelete = user.isAdm ? true : messages.reduce((previous, current) => {
+            if (!previous)
+              return previous
+            return (user.isAdm || current.id_user == user .id)
+          }, true);
+
+          if (!canDelete) {
+            return respond(new Error(
+              'User can not delete this topic because there are messages from other users'))
+          } else {
+
+            // removing topic
+            topic.remove$(err => {
+              messages.forEach(message => {
+                message.remove$(err => {})
+              })
+
+              return respond(err)
+            })
+          }
+        })
       })
     })
   })
-
 }

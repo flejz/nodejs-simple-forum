@@ -7,7 +7,7 @@
 var app = require('../app')
 var debug = require('debug')('nodejs-simple-forum:server')
 var http = require('http')
-var config = require('../config')
+var config = require('../app.config')
 
 /**
  * Get port from environment and store in Express.

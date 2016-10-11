@@ -1,4 +1,4 @@
-const assert = require('assert')
+const assert = require('chai').assert
 const seneca = require('seneca')({
     log: 'silent'
   })
@@ -17,7 +17,7 @@ before((done) => {
 describe('When requesting all the messages by topic', () => {
   it('should retrieve a list of all the messages ordered by date', (done) => {
 
-    seneca.act('role:message,cmd:all', {
+    seneca.act('role:message,cmd:by_topic', {
       id_topic: '1'
     }, (err, messages) => {
 
@@ -30,7 +30,7 @@ describe('When requesting all the messages by topic', () => {
   })
   it('should retrieve the main_message as first', (done) => {
 
-    seneca.act('role:message,cmd:all', {
+    seneca.act('role:message,cmd:by_topic', {
       id_topic: '1'
     }, (err, messages) => {
 

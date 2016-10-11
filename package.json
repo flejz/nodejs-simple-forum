@@ -11,8 +11,7 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.2.0",
     "express": "^4.14.0",
-    "express-session": "^1.14.1",
-    "jade": "~1.11.0",
+    "jsonwebtoken": "^7.1.9",
     "morgan": "~1.7.0",
     "seneca": "^3.1.0",
     "seneca-basic": "^0.5.0",
@@ -20,6 +19,7 @@
     "seneca-mongo-store": "^1.1.0"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "mocha": "^3.0.2",
     "seneca": "^3.1.0",
     "seneca-basic": "^0.5.0",

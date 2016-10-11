@@ -1,6 +1,5 @@
-const config = require('./config')
+const config = require('./app.config')
 const express = require('express')
-const session = require('express-session')
 const path = require('path')
 const logger = require('morgan')
 const cookieParser = require('cookie-parser')
@@ -10,70 +9,45 @@ const seneca = require('seneca')({
   })
   .use('basic')
   .use('entity')
-  .use('./modules/topic')
   .use('./modules/user')
   .use('./modules/topic')
   .use('./modules/message')
 
+
+const auth = require('./app.auth')(seneca)
+const error = require('./app.error')()
 const app = express()
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'jade')
-
-app.use(session({
-  secret: 'qmagico',
-  resave: false,
-  saveUninitialized: true
-}))
 app.use(logger('dev'))
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-  extended: false
+  extended: true
 }))
 app.use(cookieParser())
-app.use(express.static(path.join(__dirname, 'public')))
 
-const index = require('./routes/index')(seneca)
-const user = require('./routes/user')(seneca)
-const register = require('./routes/register')(seneca)
-const topic = require('./routes/topic')(seneca)
-
-app.use('/', index)
-app.use('/user', user)
-app.use('/register', register)
-app.use('/topic', topic)
-
-// catch 404 and forward to error handler
+// Header and auth handlers
 app.use(function(req, res, next) {
-  const err = new Error('Not Found')
-  err.status = 404
-  next(err)
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, content-type, Authorization')
+  next()
 })
+app.use(auth.parseHeader)
 
-// error handlers
+// Error handlers
+app.use(error.parseError)
 
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500)
-    res.render('error', {
-      message: err.message,
-      error: err
-    })
-  })
-}
+// Routing
+const signin = require('./routes/signin')(seneca)
+const signup = require('./routes/signup')(seneca)
+const topic = require('./routes/topic')(seneca)
+const message = require('./routes/message')(seneca)
 
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500)
-  res.render('error', {
-    message: err.message,
-    error: {}
-  })
-})
+app.use('/signin', signin)
+app.use('/signup', signup)
+app.use('/topic', topic)
+app.use('/message', message)
+
 
 // Exporting module
 module.exports = app
@@ -84,10 +58,12 @@ if (config.mockData) {
   const mockTopic = require('./tests/mock/mock-topic')(seneca)
   const mockMessages = require('./tests/mock/mock-message')(seneca)
 
+
+  console.log('> mongodb url is empty - mocking data')
+
   mockUser.it().then(() => {
     mockTopic.it().then(() => {
       mockMessages.it().then(() => {
-        console.log('> mongodb url is empty - mocking data')
         console.log('> data mock succeed')
       })
     })

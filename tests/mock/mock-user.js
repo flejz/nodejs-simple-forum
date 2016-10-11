@@ -1,24 +1,29 @@
 module.exports = function(seneca) {
 
+  const webtoken = require("jsonwebtoken")
+
   // List
   var users = [{
     name: 'Jaime Flores',
     id: 'me',
-    username: 'devandroll',
+    username: 'dev',
     password: 'dev',
-    isAdm: true
+    isAdm: true,
+    token: 'me_token'
   }, {
     id: 'she',
     name: 'Anna Losch',
     username: 'annalos',
     password: 'anna',
-    isAdm: false
+    isAdm: false,
+    token: 'she_token'
   }, {
     id: 'he',
     name: 'Germán Castillo',
     username: 'germancas',
     password: 'german',
-    isAdm: false
+    isAdm: false,
+    token: 'he_token'
   }]
 
   // Mock user
@@ -31,6 +36,7 @@ module.exports = function(seneca) {
       user.username = usr.username
       user.password = usr.password
       user.isAdm = usr.isAdm
+      user.token = usr.token
 
       user.save$(function(err, obj) {
         if (err)

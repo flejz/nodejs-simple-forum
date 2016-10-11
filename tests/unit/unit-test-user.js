@@ -1,4 +1,4 @@
-const assert = require('assert')
+const assert = require('chai').assert
 const seneca = require('seneca')({
     log: 'silent'
   })
@@ -19,6 +19,22 @@ describe('When request an user by id', () => {
 
     seneca.act('role:user,cmd:get', {
       id: 'me'
+    }, (err, user) => {
+
+      if (err)
+        return done(err)
+
+      assert.isDefined(user)
+      done()
+    })
+  })
+})
+
+describe('When request an user by token', () => {
+  it('should return the register', (done) => {
+
+    seneca.act('role:user,cmd:get', {
+      token: 'me_token'
     }, (err, user) => {
 
       if (err)
@@ -88,7 +104,7 @@ describe('When an user tries to register', () => {
       })
 
       describe('With an unexistant username', () => {
-        it('should return the inserted register', (done) => {
+        it('should return the inserted register with token', (done) => {
 
           seneca.act('role:user,cmd:add', {
             name: 'Jaime',
@@ -101,7 +117,8 @@ describe('When an user tries to register', () => {
             if (err)
               return done(err)
 
-            assert.ok(user)
+            var teste = assert.isDefined(user.token)
+
             done()
           })
         })
@@ -145,7 +162,7 @@ describe('When an user tries to login', () => {
     it('should return the user register', (done) => {
 
       seneca.act('role:user,cmd:login', {
-        username: 'devandroll',
+        username: 'dev',
         password: 'dev'
       }, (err, user) => {
 
