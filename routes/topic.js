@@ -95,7 +95,7 @@ module.exports = function(seneca) {
           }, err ? 500 : 404)
         }
 
-        seneca.act('role:message,cmd:all', {
+        seneca.act('role:message,cmd:by_topic', {
           id_topic: topic.id
         }, (err, messages) => {
 

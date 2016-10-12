@@ -1,13 +1,16 @@
-module.exports = function(seneca) {
+module.exports = function (seneca) {
   'use strict'
 
   const router = require('express').Router()
+  const error = require('../app.error')()
 
   /**
    * Signs up a new user
    * @route signup/
    */
-  router.post('/', function(req, res, next) {
+  router.post('/', function (req, res, next) {
+
+    console.log(req.body);
 
     seneca.act('role:user,cmd:add', {
       name: req.body.name,
@@ -20,14 +23,15 @@ module.exports = function(seneca) {
 
       if (err) {
         if (err.details.message == 'Password mismatch')
-          res.render('register', {
-            passwordMismatch: true
+          return error.handle(res, {
+            message: "Password mismatch"
           })
         else
-          res.render('error', err)
+          return error.handle(res, err)
       }
-      req.session.loggedUser = user
-      res.redirect('/')
+      res.json({
+        result: user
+      })
     })
   })
 
