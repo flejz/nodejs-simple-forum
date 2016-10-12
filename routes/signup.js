@@ -17,8 +17,7 @@ module.exports = function (seneca) {
       username: req.body.username,
       password: req.body.password,
       passwordMatch: req.body.passwordMatch,
-      isAdm: req.body.isAdm != undefined && req.body.isAdm === 'on' ?
-        true : false
+      isAdm: req.body.isAdm === true
     }, (err, user) => {
 
       if (err) {
@@ -29,6 +28,7 @@ module.exports = function (seneca) {
         else
           return error.handle(res, err)
       }
+
       res.json({
         result: user
       })
