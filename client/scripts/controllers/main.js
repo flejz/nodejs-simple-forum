@@ -1,3 +1,5 @@
+
+
 'use strict';
 
 angular.module('simpleforum')
@@ -13,8 +15,8 @@ angular.module('simpleforum')
 
       // Validates if the context has the token
       function hasToken() {
-        $rootScope.token = $scope.token = !!$localStorage.user && !!
-          $localStorage.user.token;
+        $rootScope.token = $scope.token = !!$localStorage.user && !! $localStorage.user.token;
+        $scope.user = !!$rootScope.token ? $localStorage.user : null;
       }
 
       // The dialog controller
@@ -55,12 +57,14 @@ angular.module('simpleforum')
 
             hasToken();
 
-          }, function (err) {
+          }, function (res) {
             $rootScope.error = 'Failed to signin';
 
-            //dialog.hide();
-            scope.error = err;
             scope.loading = false;
+            if (!res)
+                res = {error:{message:'Fail!'}};
+            scope.error = res.error;
+            scope.errorMsg = res.error.message;
           })
 
         }
@@ -100,12 +104,14 @@ angular.module('simpleforum')
 
             hasToken();
 
-          }, function (err) {
+          }, function (res) {
             $rootScope.error = 'Failed to signup';
 
-            //dialog.hide();
-            scope.error = err;
             scope.loading = false;
+            if (!res)
+                res = {error:{message:'Fail!'}};
+            scope.error = res.error;
+            scope.errorMsg = res.error.message;
           })
 
         }

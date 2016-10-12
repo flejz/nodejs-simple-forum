@@ -3,8 +3,7 @@
 angular.module('simpleforum', [
     'ngStorage',
     'ngRoute',
-    'ngMaterial',
-    'angular-loading-bar'
+    'ngMaterial'
   ])
   .config(['$routeProvider', '$httpProvider',
   function ($routeProvider,
@@ -12,8 +11,8 @@ angular.module('simpleforum', [
 
     $routeProvider.
     when('/', {
-      templateUrl: 'partials/home.html',
-      controller: 'MainCtrl'
+      templateUrl: 'partials/topic.html',
+      controller: 'TopicCtrl'
     }).
     when('/me', {
       templateUrl: 'partials/me.html',

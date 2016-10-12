@@ -13,10 +13,13 @@
     <md-toolbar>
       <div class="md-toolbar-tools">
         <h2>
-          <span>Simple Forum</span>
+          <span>SIMPLE FORUM</span>
         </h2>
         <span flex></span>
-        <md-button ng-show="token" aria-label="Log Out" ng-click="logout()">
+        <h3 ng-show="token" >
+          <span>Hello <b> {{ user.name }}! </b></span>
+        </h3>
+        <md-button ng-show="token" class="md-raised" aria-label="Log Out" ng-click="logout()">
           Log Out
         </md-button>
         <md-button ng-hide="token" aria-label="Sign In" ng-click="signin($event)">
@@ -28,7 +31,44 @@
       </div>
     </md-toolbar>
 
+    <md-content flex layout-padding layout-xs="column" layout="row" layout-align="center center" ng-hide="token">
+      <div flex-xs flex-gt-xs="50" layout="column" md-center ng-hide="token">
+        <md-card>
+          <img ng-src="assets/images/tech_trends.jpg" class="md-card-image" alt="Tech Trends">
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">Simple Forum</span>
+            </md-card-title-text>
+          </md-card-title>
+          <md-card-content>
+            <p>
+              Sign In to see the topics!
+            </p>
+          </md-card-content>
+        </md-card>
+      </div>
+    </md-content>
+
+
     <div class="container" ng-view="">
+      <md-content flex layout-padding layout-xs="column" layout="row" layout-align="center center">
+        <div flex-xs flex-gt-xs="50" layout="column" md-center ng-hide="token">
+          <md-card>
+            <img ng-src="assets/images/tech_trends.jpg" class="md-card-image" alt="Tech Trends">
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">Simple Forum</span>
+              </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+              <p>
+                Sign In to see the topics!
+              </p>
+            </md-card-content>
+          </md-card>
+        </div>
+      </md-content>
+
     </div>
 
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
@@ -42,6 +82,8 @@
     <script src="/lib/loading-bar.js"></script>
     <script src="/scripts/app.js"></script>
     <script src="/scripts/controllers/main.js"></script>
+    <script src="/scripts/controllers/topic.js"></script>
     <script src="/scripts/services/user.js"></script>
+    <script src="/scripts/services/topic.js"></script>
   </body>
 </html>
