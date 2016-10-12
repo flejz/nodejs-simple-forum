@@ -6,7 +6,7 @@ module.exports = function(seneca) {
   const error = require('../app.error')()
 
   /**
-   * Gets all messages
+   * Adds a new message
    * @route POST /message
    */
   router.post('/',
@@ -29,6 +29,34 @@ module.exports = function(seneca) {
         res.json({result: message})
       })
     })
+
+    /**
+     * Updates a topic
+     * @route POST topic/
+     */
+    router.put('/',
+      auth.parseHeader,
+      auth.parseToken,
+      function(req, res) {
+
+        // Updates the message
+        seneca.act('role:message,cmd:update', {
+          id: req.body.id,
+          title: req.body.title,
+          description: req.body.description,
+          id_user: req.user.id,
+        }, (err,  message) => {
+
+          if (err || ! message) {
+            return error.handle(res, err || {
+              message: "Message not found"
+            }, err ? 500 : 404)
+          }
+          return res.json({
+            result: message
+          })
+        })
+      })
 
   /**
    * Deletes a specific message by id

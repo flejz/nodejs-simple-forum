@@ -18,7 +18,7 @@ module.exports = function(seneca) {
       seneca.act('role:topic,cmd:all', (err, topics) => {
 
         topics.forEach(topic => {
-          topic.canDelete = req.user.isAdm || req.user.id == topic.id_user
+          topic.canModify = req.user.isAdm || req.user.id == topic.id_user
         })
 
         return res.json({
@@ -77,6 +77,54 @@ module.exports = function(seneca) {
     })
 
   /**
+   * Updates a topic
+   * @route POST topic/
+   */
+  router.put('/',
+    auth.parseHeader,
+    auth.parseToken,
+    function(req, res) {
+
+      // Updates the topic
+      seneca.act('role:topic,cmd:update', {
+        id: req.body.id,
+        title: req.body.title,
+        description: req.body.description,
+        id_user: req.user.id
+      }, (err, topic) => {
+
+        if (err || !topic) {
+          return error.handle(res, err || {
+            message: "Topic not found"
+          }, err ? 500 : 404)
+        }
+
+        seneca.act('role:message,cmd:by_topic', {
+          id_topic: topic.id
+        }, (err, messages) => {
+
+          if (err) {
+            return error.handle(res, err)
+          }
+
+          let user = req.user
+
+          topic.canModify = user.isAdm || user.id == topic.id_user
+          topic.messages = messages
+          topic.messages.forEach(message => {
+            messages.canModify = user.isAdm || user.id ==
+              message.id_user
+          })
+
+          return res.json({
+            result: topic
+          })
+        })
+
+      })
+    })
+
+  /**
    * Gets a specific topic by id
    * @route GET topic/ID
    */
@@ -105,10 +153,10 @@ module.exports = function(seneca) {
 
           let user = req.user
 
-          topic.canDelete = user.isAdm || user.id == topic.id_user
+          topic.canModify = user.isAdm || user.id == topic.id_user
           topic.messages = messages
           topic.messages.forEach(message => {
-            messages.canDelete = user.isAdm || user.id ==
+            messages.canModify = user.isAdm || user.id ==
               message.id_user
           })
 

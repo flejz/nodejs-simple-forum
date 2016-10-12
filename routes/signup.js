@@ -10,8 +10,6 @@ module.exports = function (seneca) {
    */
   router.post('/', function (req, res, next) {
 
-    console.log(req.body);
-
     seneca.act('role:user,cmd:add', {
       name: req.body.name,
       username: req.body.username,
