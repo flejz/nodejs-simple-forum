@@ -1,5 +1,50 @@
-<div class="jumbotron">
-  <center>
-    <h1>Sign In to see the Topics!</h1>
-  </center>
-</div>
+<md-dialog aria-label="Mango (Fruit)">
+  <form ng-cloak>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Sign In</h2>
+      </div>
+    </md-toolbar>
+    <md-toolbar class="md-warn" ng-show="!!error">
+      <div class="md-toolbar-tools">
+        <h2>Invalid Credentials!</h2>
+      </div>
+    </md-toolbar>
+    <md-progress-linear md-mode="indeterminate" class="md-accent" ng-show="loading"></md-progress-linear>
+    <md-dialog-content>
+      <md-content layout-padding>
+        <form name="signInForm">
+          <div layout-gt-sm="row">
+            <md-input-container class="md-block" flex-gt-sm>
+              <label>Username</label>
+              <input required name="username" ng-model="username" />
+
+              <div ng-messages="signInForm.username.$error">
+                <div ng-message="required">Username is required.</div>
+              </div>
+            </md-input-container>
+          </div>
+          <div layout-gt-sm="row">
+            <md-input-container class="md-block" flex-gt-sm>
+              <label>Password</label>
+              <input type="password" required name="password" ng-model="password" />
+
+              <div ng-messages="signInForm.password.$error">
+                <div ng-message="required">Password is required.</div>
+              </div>
+            </md-input-container>
+          </div>
+        </form>
+      </md-content>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <md-button class="md-raised" ng-disabled="!username || !password || loading" ng-click="answer()">
+       Sign In
+      </md-button>
+      <span flex></span>
+      <md-button class="md-warn" ng-disabled="loading" ng-click="cancel()">
+       Cancel
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>
