@@ -5,8 +5,7 @@ angular.module('simpleforum')
     function () {
 
       return {
-        //serviceUrl: "http://nodejs-simpleforum-backend.herokuapp.com",
-        serviceUrl: "http://localhost:3000",
+        serviceUrl: "http://nodejs-simpleforum-backend.herokuapp.com",
         tokenTag: 'qmagico'
       };
     }
