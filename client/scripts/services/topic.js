@@ -12,6 +12,12 @@ angular.module('simpleforum')
             .success(success)
             .error(error)
         },
+        get: function (id, success, error) {
+          $http.get(Static.serviceUrl + '/topic/' + id)
+            .success(success)
+            .error(error)
+        },
+
         add: function (data, success, error) {
           $http.post(Static.serviceUrl + '/topic', data)
             .success(success)
@@ -22,8 +28,8 @@ angular.module('simpleforum')
             .success(success)
             .error(error)
         },
-        delete: function (data, success, error) {
-          $http.delete(Static.serviceUrl + '/topic', data)
+        delete: function (id, success, error) {
+          $http.delete(Static.serviceUrl + '/topic', {params: {id: id}})
             .success(success)
             .error(error)
         }

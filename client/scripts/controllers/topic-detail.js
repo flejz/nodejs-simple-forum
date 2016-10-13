@@ -1,16 +1,15 @@
 'use strict';
 
 angular.module('simpleforum')
-  .controller('TopicCtrl', [
+  .controller('TopicDetailCtrl', [
     '$rootScope',
     '$scope',
     '$localStorage',
-    '$location',
     '$mdDialog',
     'Util',
     'TopicServices',
     'DialogEvents',
-    function ($rootScope, $scope, $localStorage, $location, $mdDialog,
+    function ($rootScope, $scope, $localStorage, $mdDialog,
       Util, TopicServices, DialogEvents) {
 
       // Watching the root scope variable
@@ -18,20 +17,6 @@ angular.module('simpleforum')
         $scope.token = $rootScope.token;
         load();
       });
-
-      // Shows the detail of the topic
-      $scope.detail = function (topic) {
-
-        $scope.loading = true;
-
-        TopicServices.get(topic.id, function (res) {
-          $scope.loading = true;
-          $location.path('/topic/' + topic.id);
-
-        }, function (err) {
-          $scope.loading = true;
-        });
-      }
 
       // Inserting a new topic
       $scope.new = function (ev) {
@@ -80,6 +65,7 @@ angular.module('simpleforum')
 
       // Editing an existing topic
       $scope.edit = function (topic) {
+        $scope.topic = topic;
 
         function callback(scope, dialog) {
           scope.loading = true;

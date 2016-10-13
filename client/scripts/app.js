@@ -14,9 +14,9 @@ angular.module('simpleforum', [
         templateUrl: 'partials/topic/list.html',
         controller: 'TopicCtrl'
       }).
-      when('/me', {
-        templateUrl: 'partials/me.html',
-        controller: 'HomeCtrl'
+      when('/topic/:id', {
+        templateUrl: 'partials/topic/detail.html',
+        controller: 'TopicDetailCtrl'
       }).
       otherwise({
         redirectTo: '/'
@@ -34,9 +34,6 @@ angular.module('simpleforum', [
               return config;
             },
             'responseError': function (response) {
-              if (response.status === 401 || response.status === 403) {
-                $location.path('/signin');
-              }
               return $q.reject(response);
             }
           };
