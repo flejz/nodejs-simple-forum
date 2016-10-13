@@ -68,7 +68,7 @@ module.exports = function(seneca) {
     function(req, res) {
 
       seneca.act('role:message,cmd:del', {
-        id: req.body.id,
+        id: req.query.id,
         id_user: req.user.id
       }, err => {
 
