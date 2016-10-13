@@ -30,7 +30,6 @@ describe('When an user or adm tries to update a message', () => {
       seneca.act('role:message,cmd:update', {
         id: '1',
         title: 'Node.js Message',
-        description: 'Test',
         id_user: 'he',
         main_message: false
       }, (err, message) => {
