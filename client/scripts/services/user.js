@@ -3,19 +3,17 @@
 angular.module('simpleforum')
   .factory('UserServices', [
     '$http',
-    '$localStorage',
-    function ($http, $localStorage) {
-
-      var service = "http://nodejs-simpleforum-backend.herokuapp.com";
+    'Static',
+    function ($http, Static) {
 
       return {
         signin: function (data, success, error) {
-          $http.post(service + '/signin', data)
+          $http.post(Static.serviceUrl + '/signin', data)
             .success(success)
             .error(error)
         },
         signup: function (data, success, error) {
-          $http.post(service + '/signup', data)
+          $http.post(Static.serviceUrl + '/signup', data)
             .success(success)
             .error(error)
         },

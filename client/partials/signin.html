@@ -17,7 +17,7 @@
           <div layout-gt-sm="row">
             <md-input-container class="md-block" flex-gt-sm>
               <label>Username</label>
-              <input required name="username" ng-model="username" />
+              <input ng-disabled="loading" required name="username" ng-model="username" />
 
               <div ng-messages="signInForm.username.$error">
                 <div ng-message="required">Username is required.</div>
@@ -27,7 +27,7 @@
           <div layout-gt-sm="row">
             <md-input-container class="md-block" flex-gt-sm>
               <label>Password</label>
-              <input type="password" required name="password" ng-model="password" />
+              <input ng-disabled="loading" type="password" required name="password" ng-model="password" />
 
               <div ng-messages="signInForm.password.$error">
                 <div ng-message="required">Password is required.</div>

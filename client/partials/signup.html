@@ -17,7 +17,7 @@
 
           <md-input-container class="md-block" flex-gt-sm>
             <label>Name</label>
-            <input required name="name" ng-model="name" />
+            <input ng-disabled="loading" required name="name" ng-model="name" />
 
             <div ng-messages="signUpForm.name.$error">
               <div ng-message="required">Name is required.</div>
@@ -27,7 +27,7 @@
           <div layout="row">
             <md-input-container class="md-block" flex-gt-sm>
               <label>Username</label>
-              <input required name="username" ng-model="username" />
+              <input ng-disabled="loading" required name="username" ng-model="username" />
 
               <div ng-messages="signUpForm.username.$error">
                 <div ng-message="required">Username is required.</div>
@@ -35,7 +35,7 @@
             </md-input-container>
 
             <md-input-container class="md-block" flex-gt-sm>
-              <md-checkbox ng-model="isAdm" class="md-primary">
+              <md-checkbox ng-disabled="loading" ng-model="isAdm" class="md-primary">
                 Is Admin?
               </md-checkbox>
             </md-input-container>
@@ -45,7 +45,7 @@
           <div layout="row">
             <md-input-container flex="50">
               <label>Password</label>
-              <input type="password" required name="password" ng-model="password" />
+              <input ng-disabled="loading" type="password" required name="password" ng-model="password" />
 
               <div ng-messages="signUpForm.password.$error">
                 <div ng-message="required">Password is required.</div>
@@ -53,7 +53,7 @@
             </md-input-container>
             <md-input-container flex="50">
               <label>Password Confirmation</label>
-              <input type="password" required name="passwordMatch" ng-model="passwordMatch" />
+              <input ng-disabled="loading" type="password" required name="passwordMatch" ng-model="passwordMatch" />
 
               <div ng-messages="signUpForm.passwordMatch.$error">
                 <div ng-message="required">Password Confirmation is required.</div>

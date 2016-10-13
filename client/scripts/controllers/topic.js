@@ -4,17 +4,77 @@ angular.module('simpleforum')
   .controller('TopicCtrl', [
     '$rootScope',
     '$scope',
-    '$location',
     '$localStorage',
+    '$mdDialog',
     'TopicServices',
-    function ($rootScope, $scope, $location, $localStorage,
-      TopicServices) {
+    'DialogEvents',
+    function ($rootScope, $scope, $localStorage, $mdDialog,
+      TopicServices, DialogEvents) {
+
+      // Initializing some scope objects
+      $scope.topic = {};
 
       // Watching the root scope variable
       $rootScope.$watch('token', function () {
         $scope.token = $rootScope.token;
         load();
       });
+
+      // Inserting a new topic
+      $scope.new = function (ev) {
+
+        function callback(scope, dialog) {
+
+          scope.loading = true;
+
+          var data = {
+            title: scope.topic.title,
+            description: scope.topic.description,
+            message: scope.topic.message
+          }
+
+          TopicServices.add(data, function (res) {
+
+            load();
+
+            dialog.hide();
+            scope.loading = false;
+
+          }, function (res) {
+
+            $rootScope.error = 'Failed to add the topic';
+
+            $scope.loading = false;
+            if (!res)
+                res = {error:{message:'Fail!'}};
+            scope.error = res.error;
+            scope.errorMsg = res.error.message;
+          });
+        }
+
+        // Shows the dialog
+        $mdDialog.show({
+          controller: DialogEvents(callback),
+          templateUrl: 'partials/topic/item.html',
+          parent: angular.element(document.body),
+          targetEvent: ev,
+          clickOutsideToClose: false
+        });
+      }
+
+      // Editing an existing topic
+      $scope.edit = function (topic) {
+        $scope.topic = topic;
+      }
+
+      // Formats the date
+      $scope.formatDate = function (date) {
+          return new Date(date).toLocaleDateString()
+        }
+        // Formats the time
+      $scope.formatTime = function (date) {
+        return new Date(date).toLocaleTimeString()
+      }
 
       // Loads the topics
       function load() {
@@ -34,15 +94,7 @@ angular.module('simpleforum')
         })
       }
 
-      // Formats the date
-      $scope.formatDate = function (date) {
-          return new Date(date).toLocaleDateString()
-        }
-        // Formats the time
-      $scope.formatTime = function (date) {
-        return new Date(date).toLocaleTimeString()
-      }
-
+      // Loadign the topics
       load();
     }
   ]);

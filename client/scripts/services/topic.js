@@ -3,14 +3,17 @@
 angular.module('simpleforum')
   .factory('TopicServices', [
     '$http',
-    '$localStorage',
-    function ($http, $localStorage) {
-
-      var service = "http://nodejs-simpleforum-backend.herokuapp.com";
+    'Static',
+    function ($http, Static) {
 
       return {
         all: function (success, error) {
-          $http.get(service + '/topic')
+          $http.get(Static.serviceUrl + '/topic')
+            .success(success)
+            .error(error)
+        },
+        add: function (data, success, error) {
+          $http.post(Static.serviceUrl + '/topic', data)
             .success(success)
             .error(error)
         }

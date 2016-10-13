@@ -6,34 +6,17 @@ angular.module('simpleforum')
   .controller('MainCtrl', [
     '$rootScope',
     '$scope',
-    '$location',
     '$localStorage',
     '$mdDialog',
     'UserServices',
-    function ($rootScope, $scope, $location, $localStorage, $mdDialog,
-      UserServices) {
+    'DialogEvents',
+    function ($rootScope, $scope, $localStorage, $mdDialog,
+      UserServices, DialogEvents) {
 
       // Validates if the context has the token
       function hasToken() {
         $rootScope.token = $scope.token = !!$localStorage.user && !! $localStorage.user.token;
         $scope.user = !!$rootScope.token ? $localStorage.user : null;
-      }
-
-      // The dialog controller
-      function DialogController(callback) {
-        return function ($scope, $mdDialog) {
-          $scope.hide = function () {
-            $mdDialog.hide();
-          };
-
-          $scope.cancel = function () {
-            $mdDialog.cancel();
-          };
-
-          $scope.answer = function (answer) {
-            callback($scope, $mdDialog, answer);
-          };
-        }
       }
 
       $scope.signin = function (ev) {
@@ -65,18 +48,16 @@ angular.module('simpleforum')
                 res = {error:{message:'Fail!'}};
             scope.error = res.error;
             scope.errorMsg = res.error.message;
-          })
-
+          });
         }
 
         // Shows the dialog
         $mdDialog.show({
-          controller: DialogController(callback),
+          controller: DialogEvents(callback),
           templateUrl: 'partials/signin.html',
           parent: angular.element(document.body),
           targetEvent: ev,
-          clickOutsideToClose: false,
-          fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+          clickOutsideToClose: false
         });
       };
 
@@ -112,18 +93,16 @@ angular.module('simpleforum')
                 res = {error:{message:'Fail!'}};
             scope.error = res.error;
             scope.errorMsg = res.error.message;
-          })
-
+          });
         }
 
         // Shows the dialog
         $mdDialog.show({
-          controller: DialogController(callback),
+          controller: DialogEvents(callback),
           templateUrl: 'partials/signup.html',
           parent: angular.element(document.body),
           targetEvent: ev,
-          clickOutsideToClose: false,
-          fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+          clickOutsideToClose: false
         });
       };
 
