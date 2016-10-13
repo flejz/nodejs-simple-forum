@@ -16,6 +16,11 @@ angular.module('simpleforum')
           $http.post(Static.serviceUrl + '/topic', data)
             .success(success)
             .error(error)
+        },
+        update: function (data, success, error) {
+          $http.put(Static.serviceUrl + '/topic', data)
+            .success(success)
+            .error(error)
         }
       };
     }

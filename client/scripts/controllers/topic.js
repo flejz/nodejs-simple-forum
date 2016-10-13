@@ -26,8 +26,7 @@ angular.module('simpleforum')
 
           var data = {
             title: scope.data.title,
-            description: scope.data.description,
-            message: scope.data.message
+            description: scope.data.description
           }
 
           TopicServices.add(data, function (res) {
@@ -64,7 +63,28 @@ angular.module('simpleforum')
         $scope.topic = topic;
 
         function callback(scope, dialog){
+          scope.loading = true;
+
+          var data = {
+            id: scope.data.id,
+            title: scope.data.title,
+            description: scope.data.description
+          }
+
+          TopicServices.update(data, function (res) {
+            load();
             dialog.hide();
+            scope.loading = false;
+
+          }, function (res) {
+
+            $rootScope.error = 'Failed to update the topic';
+            $scope.loading = false;
+            if (!res)
+                res = {error:{message:'Fail!'}};
+            scope.error = res.error;
+            scope.errorMsg = res.error.message;
+          });
         }
 
         // Shows the dialog

@@ -24,21 +24,12 @@
             </div>
           </md-input-container>
 
-          <md-input-container class="md-block" flex-gt-sm>
+          <md-input-container class="md-block">
             <label>Description</label>
-            <input ng-disabled="loading" required name="description" ng-model="data.description" />
+            <textarea ng-disabled="loading" required name="message" ng-model="data.description" md-maxlength="150" rows="3" md-select-on-focus></textarea>
 
             <div ng-messages="topicForm.description.$error">
               <div ng-message="required">Description is required.</div>
-            </div>
-          </md-input-container>
-
-          <md-input-container class="md-block">
-            <label>Message</label>
-            <textarea ng-disabled="loading" required name="message" ng-model="data.message" md-maxlength="150" rows="3" md-select-on-focus></textarea>
-
-            <div ng-messages="topicForm.message.$error">
-              <div ng-message="required">Message is required.</div>
             </div>
           </md-input-container>
 
