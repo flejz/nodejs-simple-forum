@@ -21,6 +21,11 @@ angular.module('simpleforum')
           $http.put(Static.serviceUrl + '/topic', data)
             .success(success)
             .error(error)
+        },
+        delete: function (data, success, error) {
+          $http.delete(Static.serviceUrl + '/topic', data)
+            .success(success)
+            .error(error)
         }
       };
     }

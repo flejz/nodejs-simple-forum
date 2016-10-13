@@ -6,10 +6,11 @@ angular.module('simpleforum')
     '$scope',
     '$localStorage',
     '$mdDialog',
+    'Util',
     'TopicServices',
     'DialogEvents',
     function ($rootScope, $scope, $localStorage, $mdDialog,
-      TopicServices, DialogEvents) {
+      Util, TopicServices, DialogEvents) {
 
       // Watching the root scope variable
       $rootScope.$watch('token', function () {
@@ -42,7 +43,11 @@ angular.module('simpleforum')
 
             $scope.loading = false;
             if (!res)
-                res = {error:{message:'Fail!'}};
+              res = {
+                error: {
+                  message: 'Fail!'
+                }
+              };
             scope.error = res.error;
             scope.errorMsg = res.error.message;
           });
@@ -62,7 +67,7 @@ angular.module('simpleforum')
       $scope.edit = function (topic) {
         $scope.topic = topic;
 
-        function callback(scope, dialog){
+        function callback(scope, dialog) {
           scope.loading = true;
 
           var data = {
@@ -81,7 +86,11 @@ angular.module('simpleforum')
             $rootScope.error = 'Failed to update the topic';
             $scope.loading = false;
             if (!res)
-                res = {error:{message:'Fail!'}};
+              res = {
+                error: {
+                  message: 'Fail!'
+                }
+              };
             scope.error = res.error;
             scope.errorMsg = res.error.message;
           });
@@ -89,10 +98,36 @@ angular.module('simpleforum')
 
         // Shows the dialog
         $mdDialog.show({
-          controller: DialogEvents(callback, topic),
+          controller: DialogEvents(callback, Util.clone(topic)),
           templateUrl: 'partials/topic/item.html',
           parent: angular.element(document.body),
           clickOutsideToClose: false
+        });
+      }
+
+      // Deleting a topic
+      $scope.delete = function (topic) {
+        var confirm = $mdDialog.confirm()
+          .title('Would you like to delete the topic?')
+          .ariaLabel('Deletion')
+          .ok('Yes')
+          .cancel('No');
+
+        $mdDialog.show(confirm).then(function () {
+
+          var data = {
+            id: topic.id
+          }
+
+          TopicServices.delete(data, function (res) {
+            
+            load();
+            scope.loading = false;
+
+          }, function (res) {
+
+            $rootScope.error = 'Failed to update the topic';
+          });
         });
       }
 

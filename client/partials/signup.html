@@ -64,12 +64,11 @@
       </md-content>
     </md-dialog-content>
     <md-dialog-actions layout="row">
-      <md-button class="md-raised" ng-disabled="!name || !username || !password || !passwordMatch || loading" ng-click="answer()">
-       Sign Up
-      </md-button>
-      <span flex></span>
       <md-button class="md-warn" ng-disabled="loading" ng-click="cancel()">
        Cancel
+      </md-button>
+      <md-button class="md-raised" ng-disabled="!name || !username || !password || !passwordMatch || loading" ng-click="answer()">
+       Sign Up
       </md-button>
     </md-dialog-actions>
   </form>

@@ -38,12 +38,11 @@
       </md-content>
     </md-dialog-content>
     <md-dialog-actions layout="row">
-      <md-button class="md-raised" ng-disabled="!username || !password || loading" ng-click="answer()">
-       Sign In
-      </md-button>
-      <span flex></span>
       <md-button class="md-warn" ng-disabled="loading" ng-click="cancel()">
        Cancel
+      </md-button>
+      <md-button class="md-raised" ng-disabled="!username || !password || loading" ng-click="answer()">
+       Sign In
       </md-button>
     </md-dialog-actions>
   </form>

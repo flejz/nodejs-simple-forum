@@ -37,12 +37,11 @@
       </md-content>
     </md-dialog-content>
     <md-dialog-actions layout="row">
-      <md-button class="md-raised" ng-disabled="!data.title || !data.description || !data.message || loading" ng-click="answer()">
-       Add
-      </md-button>
-      <span flex></span>
       <md-button class="md-warn" ng-disabled="loading" ng-click="cancel()">
        Cancel
+      </md-button>
+      <md-button class="md-raised" ng-disabled="!data.title || !data.description || loading" ng-click="answer()">
+       Confirm
       </md-button>
     </md-dialog-actions>
   </form>
