@@ -62,13 +62,13 @@ module.exports = function(seneca) {
    * Deletes a specific message by id
    * @route DELETE message/ID
    */
-  router.delete('/:id',
+  router.delete('/',
     auth.parseHeader,
     auth.parseToken,
     function(req, res) {
 
       seneca.act('role:message,cmd:del', {
-        id: req.params.id,
+        id: req.body.id,
         id_user: req.user.id
       }, err => {
 

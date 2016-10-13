@@ -101,6 +101,32 @@ module.exports = function (seneca) {
       })
     })
 
+    /**
+     * Deletes a specific topic by id
+     * @route DELETE topic/ID
+     */
+    router.delete('/',
+      auth.parseHeader,
+      auth.parseToken,
+      function (req, res) {
+
+        seneca.act('role:topic,cmd:del', {
+          id: req.body.id,
+          id_user: req.user.id
+        }, err => {
+
+          if (err) {
+            return error.handle(res, err)
+          }
+
+          return res.json({
+            result: {
+              success: true
+            }
+          })
+        })
+      })
+
   /**
    * Gets a specific topic by id
    * @route GET topic/ID
@@ -140,32 +166,6 @@ module.exports = function (seneca) {
           return res.json({
             result: topic
           })
-        })
-      })
-    })
-
-  /**
-   * Deletes a specific topic by id
-   * @route DELETE topic/ID
-   */
-  router.delete('/:id',
-    auth.parseHeader,
-    auth.parseToken,
-    function (req, res) {
-
-      seneca.act('role:topic,cmd:del', {
-        id: req.params.id,
-        id_user: req.user.id
-      }, err => {
-
-        if (err) {
-          return error.handle(res, err)
-        }
-
-        return res.json({
-          result: {
-            success: true
-          }
         })
       })
     })
