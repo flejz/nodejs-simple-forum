@@ -52,15 +52,12 @@ module.exports = function message() {
 
       return respond(new Error('Incomplete params'))
     }
-    if (params.main_message == undefined)
-      params.main_message = false
 
     var message = this.make('message')
     message.title = params.title
     message.description = params.description
     message.id_user = params.id_user
     message.id_topic = params.id_topic
-    message.main_message = params.main_message
     message.date = new Date()
 
     message.save$(function(err, obj) {
@@ -105,9 +102,6 @@ module.exports = function message() {
           return respond(new Error(
             'User can not update this message'))
         }
-
-        if (params.main_message == undefined)
-          params.main_message = false
 
         message.title = params.title
         message.description = params.description

@@ -1,4 +1,4 @@
-module.exports = function(seneca) {
+module.exports = function (seneca) {
   'use strict'
 
   const router = require('express').Router()
@@ -12,7 +12,7 @@ module.exports = function(seneca) {
   router.get('/',
     auth.parseHeader,
     auth.parseToken,
-    function(req, res) {
+    function (req, res) {
 
       // Gets all the topics
       seneca.act('role:topic,cmd:all', (err, topics) => {
@@ -34,7 +34,7 @@ module.exports = function(seneca) {
   router.post('/',
     auth.parseHeader,
     auth.parseToken,
-    function(req, res) {
+    function (req, res) {
 
       // Adds the topic
       seneca.act('role:topic,cmd:add', {
@@ -47,32 +47,9 @@ module.exports = function(seneca) {
           return error.handle(res, err)
         }
 
-        // Adds the message
-        seneca.act('role:message,cmd:add', {
-          title: req.body.title,
-          description: req.body.message,
-          id_user: req.user.id,
-          id_topic: topic.id,
-          main_message: true
-        }, (err, message) => {
-
-          // If any error occurs adding the message,
-          // then deletes the topic
-          if (err) {
-
-            seneca.act('role:topic,cmd:del', {
-              id: topic.id,
-              id_user: req.user.id
-            })
-
-            return error.handle(res, err)
-          }
-
-          res.json({
-            result: topic
-          })
+        res.json({
+          result: topic
         })
-
       })
     })
 
@@ -83,7 +60,7 @@ module.exports = function(seneca) {
   router.put('/',
     auth.parseHeader,
     auth.parseToken,
-    function(req, res) {
+    function (req, res) {
 
       // Updates the topic
       seneca.act('role:topic,cmd:update', {
@@ -131,7 +108,7 @@ module.exports = function(seneca) {
   router.get('/:id',
     auth.parseHeader,
     auth.parseToken,
-    function(req, res) {
+    function (req, res) {
 
       seneca.act('role:topic,cmd:get', {
         id: req.params.id
@@ -174,7 +151,7 @@ module.exports = function(seneca) {
   router.delete('/:id',
     auth.parseHeader,
     auth.parseToken,
-    function(req, res) {
+    function (req, res) {
 
       seneca.act('role:topic,cmd:del', {
         id: req.params.id,

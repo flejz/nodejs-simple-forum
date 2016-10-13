@@ -30,8 +30,7 @@ describe('When an user or adm tries to update a message', () => {
       seneca.act('role:message,cmd:update', {
         id: '1',
         title: 'Node.js Message',
-        id_user: 'he',
-        main_message: false
+        id_user: 'he'
       }, (err, message) => {
 
         if (err){
@@ -57,8 +56,7 @@ describe('When an user or adm tries to update a message', () => {
           title: 'Node.js Message',
           description: 'Test',
           id_user: 'me',
-          id_topic: '1',
-          main_message: false
+          id_topic: '1'
         }, (err, message) => {
 
           if (err)
@@ -76,8 +74,7 @@ describe('When an user or adm tries to update a message', () => {
         title: 'Node.js Message',
         description: 'Test',
         id_user: 'she',
-        id_topic: '1',
-        main_message: false
+        id_topic: '1'
       }
 
       describe('and the message is not from himself', () => {
