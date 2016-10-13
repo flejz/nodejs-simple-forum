@@ -11,9 +11,6 @@ angular.module('simpleforum')
     function ($rootScope, $scope, $localStorage, $mdDialog,
       TopicServices, DialogEvents) {
 
-      // Initializing some scope objects
-      $scope.topic = {};
-
       // Watching the root scope variable
       $rootScope.$watch('token', function () {
         $scope.token = $rootScope.token;
@@ -28,9 +25,9 @@ angular.module('simpleforum')
           scope.loading = true;
 
           var data = {
-            title: scope.topic.title,
-            description: scope.topic.description,
-            message: scope.topic.message
+            title: scope.data.title,
+            description: scope.data.description,
+            message: scope.data.message
           }
 
           TopicServices.add(data, function (res) {
@@ -65,6 +62,18 @@ angular.module('simpleforum')
       // Editing an existing topic
       $scope.edit = function (topic) {
         $scope.topic = topic;
+
+        function callback(scope, dialog){
+            dialog.hide();
+        }
+
+        // Shows the dialog
+        $mdDialog.show({
+          controller: DialogEvents(callback, topic),
+          templateUrl: 'partials/topic/item.html',
+          parent: angular.element(document.body),
+          clickOutsideToClose: false
+        });
       }
 
       // Formats the date

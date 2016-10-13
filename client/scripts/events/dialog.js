@@ -4,8 +4,9 @@ angular.module('simpleforum')
   .factory('DialogEvents', [
     function () {
 
-      return function (callback) {
+      return function (callback, data) {
         return function ($scope, $mdDialog) {
+          $scope.data = data;
           $scope.hide = function () {
             $mdDialog.hide();
           };
