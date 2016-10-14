@@ -16,7 +16,7 @@ angular.module('simpleforum', [
       }).
       when('/topic/:id', {
         templateUrl: 'partials/topic/detail.html',
-        controller: 'TopicDetailCtrl'
+        controller: 'MessageCtrl'
       }).
       otherwise({
         redirectTo: '/'

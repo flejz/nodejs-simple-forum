@@ -1,25 +1,31 @@
 'use strict';
 
 angular.module('simpleforum')
-  .controller('TopicDetailCtrl', [
+  .controller('MessageCtrl', [
     '$rootScope',
     '$scope',
     '$localStorage',
+    '$location',
     '$mdDialog',
+    '$routeParams',
+    'Cache',
     'Util',
     'TopicServices',
+    'MessageServices',
     'DialogEvents',
-    function ($rootScope, $scope, $localStorage, $mdDialog,
-      Util, TopicServices, DialogEvents) {
+    function($rootScope, $scope, $localStorage, $location, $mdDialog,
+      $routeParams,
+      Cache, Util, TopicServices, MessageServices, DialogEvents) {
 
       // Watching the root scope variable
-      $rootScope.$watch('token', function () {
+      $rootScope.$watch('token', function() {
         $scope.token = $rootScope.token;
-        load();
+        if (!$scope.token)
+          $location.path('/');
       });
 
-      // Inserting a new topic
-      $scope.new = function (ev) {
+      // Inserting a new message
+      $scope.new = function(ev) {
 
         function callback(scope, dialog) {
 
@@ -30,16 +36,16 @@ angular.module('simpleforum')
             description: scope.data.description
           }
 
-          TopicServices.add(data, function (res) {
+          MessageServices.add(data, function(res) {
 
             load();
 
             dialog.hide();
             scope.loading = false;
 
-          }, function (res) {
+          }, function(res) {
 
-            $rootScope.error = 'Failed to add the topic';
+            $rootScope.error = 'Failed to add the message';
 
             $scope.loading = false;
             if (!res)
@@ -56,16 +62,15 @@ angular.module('simpleforum')
         // Shows the dialog
         $mdDialog.show({
           controller: DialogEvents(callback),
-          templateUrl: 'partials/topic/item.html',
+          templateUrl: 'partials/message/item.html',
           parent: angular.element(document.body),
           targetEvent: ev,
           clickOutsideToClose: false
         });
       }
 
-      // Editing an existing topic
-      $scope.edit = function (topic) {
-        $scope.topic = topic;
+      // Editing an existing message
+      $scope.edit = function(message) {
 
         function callback(scope, dialog) {
           scope.loading = true;
@@ -76,14 +81,14 @@ angular.module('simpleforum')
             description: scope.data.description
           }
 
-          TopicServices.update(data, function (res) {
+          MessageServices.update(data, function(res) {
             load();
             dialog.hide();
             scope.loading = false;
 
-          }, function (res) {
+          }, function(res) {
 
-            $rootScope.error = 'Failed to update the topic';
+            $rootScope.error = 'Failed to update the message';
             $scope.loading = false;
             if (!res)
               res = {
@@ -98,63 +103,59 @@ angular.module('simpleforum')
 
         // Shows the dialog
         $mdDialog.show({
-          controller: DialogEvents(callback, Util.clone(topic)),
+          controller: DialogEvents(callback, Util.clone(message)),
           templateUrl: 'partials/topic/item.html',
           parent: angular.element(document.body),
           clickOutsideToClose: false
         });
       }
 
-      // Deleting a topic
-      $scope.delete = function (topic) {
+      // Deleting a message
+      $scope.delete = function(message) {
         var confirm = $mdDialog.confirm()
-          .title('Would you like to delete the topic?')
+          .title('Would you like to delete the message?')
           .ariaLabel('Deletion')
           .ok('Yes')
           .cancel('No');
 
-        $mdDialog.show(confirm).then(function () {
+        $mdDialog.show(confirm).then(function() {
 
-          TopicServices.delete(topic.id, function (res) {
+          MessageServices.delete(message.id, function(res) {
 
             load();
             scope.loading = false;
 
-          }, function (res) {
+          }, function(res) {
 
-            $rootScope.error = 'Failed to update the topic';
+            $rootScope.error = 'Failed to update the message';
           });
         });
       }
 
-      // Formats the date
-      $scope.formatDate = function (date) {
-          return new Date(date).toLocaleDateString()
-        }
-        // Formats the time
-      $scope.formatTime = function (date) {
-        return new Date(date).toLocaleTimeString()
-      }
+      // Formats the date and time
+      $scope.formatDate = Util.formatDate
+      $scope.formatTime = Util.formatTime
 
-      // Loads the topics
+      // Loads the topic and topic's messages
       function load() {
 
-        if (!$scope.token) return;
+        if (!$routeParams.id) return;
 
-        $scope.topics = [];
         $scope.loading = true;
 
-        TopicServices.all(function (res) {
+        TopicServices.get($routeParams.id, function(res) {
 
-          $scope.topics = res.result;
+          $scope.topic = res.result;
+
           $scope.loading = false;
 
-        }, function (err) {
+        }, function(err) {
           $scope.loading = false;
-        })
+        });
       }
 
-      // Loadign the topics
+      // Loadign the topic
       load();
+
     }
   ]);

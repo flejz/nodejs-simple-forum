@@ -7,30 +7,22 @@ angular.module('simpleforum')
     '$localStorage',
     '$location',
     '$mdDialog',
+    'Cache',
     'Util',
     'TopicServices',
     'DialogEvents',
     function ($rootScope, $scope, $localStorage, $location, $mdDialog,
-      Util, TopicServices, DialogEvents) {
+      Cache, Util, TopicServices, DialogEvents) {
 
       // Watching the root scope variable
       $rootScope.$watch('token', function () {
         $scope.token = $rootScope.token;
-        load();
       });
 
       // Shows the detail of the topic
       $scope.detail = function (topic) {
 
-        $scope.loading = true;
-
-        TopicServices.get(topic.id, function (res) {
-          $scope.loading = true;
-          $location.path('/topic/' + topic.id);
-
-        }, function (err) {
-          $scope.loading = true;
-        });
+        $location.path('/topic/' + topic.id);
       }
 
       // Inserting a new topic
@@ -141,14 +133,9 @@ angular.module('simpleforum')
         });
       }
 
-      // Formats the date
-      $scope.formatDate = function (date) {
-          return new Date(date).toLocaleDateString()
-        }
-        // Formats the time
-      $scope.formatTime = function (date) {
-        return new Date(date).toLocaleTimeString()
-      }
+      // Formats the date and time
+      $scope.formatDate = Util.formatDate
+      $scope.formatTime = Util.formatTime
 
       // Loads the topics
       function load() {
