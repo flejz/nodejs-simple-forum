@@ -77,7 +77,7 @@ module.exports = function(seneca) {
           }, err ? 500 : 404)
         }
 
-        topic.canDelete = user.isAdm || req.user.id == topic.id_user
+        topic.canDelete = req.user.isAdm || req.user.id == topic.id_user
         topic.canEdit = req.user.id == topic.id_user
 
         return res.json({
