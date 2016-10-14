@@ -17,6 +17,7 @@ angular.module('simpleforum')
       // Watching the root scope variable
       $rootScope.$watch('token', function () {
         $scope.token = $rootScope.token;
+        load();
       });
 
       // Shows the detail of the topic
@@ -48,7 +49,7 @@ angular.module('simpleforum')
 
             $rootScope.error = 'Failed to add the topic';
 
-            $scope.loading = false;
+            scope.loading = false;
             if (!res)
               res = {
                 error: {
@@ -71,7 +72,7 @@ angular.module('simpleforum')
       }
 
       // Editing an existing topic
-      $scope.edit = function (topic) {
+      $scope.edit = function (ev, topic) {
 
         function callback(scope, dialog) {
           scope.loading = true;
@@ -90,7 +91,7 @@ angular.module('simpleforum')
           }, function (res) {
 
             $rootScope.error = 'Failed to update the topic';
-            $scope.loading = false;
+            scope.loading = false;
             if (!res)
               res = {
                 error: {
@@ -107,6 +108,7 @@ angular.module('simpleforum')
           controller: DialogEvents(callback, Util.clone(topic)),
           templateUrl: 'partials/topic/item.html',
           parent: angular.element(document.body),
+          targetEvent: ev,
           clickOutsideToClose: false
         });
       }
@@ -124,10 +126,8 @@ angular.module('simpleforum')
           TopicServices.delete(topic.id, function (res) {
 
             load();
-            scope.loading = false;
 
           }, function (res) {
-
             $rootScope.error = 'Failed to update the topic';
           });
         });

@@ -5,7 +5,7 @@
       <span>Topic: <b>{{ topic.title }}</b></span>
     </h2>
   <span flex></span>
-   <md-button class="md-raised" aria-label="New Message" ng-click="new()">
+   <md-button class="md-raised" aria-label="New Message" ng-click="new($event)">
      New Message
    </md-button>
    <md-button ng-hide="true" aria-label="None"/>
@@ -35,10 +35,10 @@
       <h3>{{ message.title }}</h3>
       <p>{{ message.description }}</p>
     </div>
-    <md-button class="md-raised" ng-click="edit(message)" ng-show="message.canModify">
+    <md-button class="md-raised" ng-click="edit($event, message)" ng-show="message.canEdit">
       Edit
     </md-button>
-    <md-button class="md-warn" ng-click="delete(message)" ng-show="message.canModify">
+    <md-button class="md-warn" ng-click="delete(message)" ng-show="message.canDelete">
       Delete
     </md-button>
     <md-divider ></md-divider>

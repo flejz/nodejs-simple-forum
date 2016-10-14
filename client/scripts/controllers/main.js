@@ -1,5 +1,3 @@
-
-
 'use strict';
 
 angular.module('simpleforum')
@@ -7,19 +5,26 @@ angular.module('simpleforum')
     '$rootScope',
     '$scope',
     '$localStorage',
+    '$location',
     '$mdDialog',
     'UserServices',
     'DialogEvents',
-    function ($rootScope, $scope, $localStorage, $mdDialog,
+    function($rootScope, $scope, $localStorage, $location, $mdDialog,
       UserServices, DialogEvents) {
 
       // Validates if the context has the token
       function hasToken() {
-        $rootScope.token = $scope.token = !!$localStorage.user && !! $localStorage.user.token;
+        $rootScope.token = $scope.token = !!$localStorage.user && !!
+          $localStorage.user.token;
         $scope.user = !!$rootScope.token ? $localStorage.user : null;
       }
 
-      $scope.signin = function (ev) {
+      $scope.home = function() {
+        $location.path('/');
+      }
+
+      // Request the sign in
+      $scope.signin = function(ev) {
 
         function callback(scope, dialog) {
 
@@ -31,7 +36,7 @@ angular.module('simpleforum')
             password: scope.password
           }
 
-          UserServices.signin(data, function (res) {
+          UserServices.signin(data, function(res) {
 
             $localStorage.user = res.result;
 
@@ -40,12 +45,16 @@ angular.module('simpleforum')
 
             hasToken();
 
-          }, function (res) {
+          }, function(res) {
             $rootScope.error = 'Failed to signin';
 
             scope.loading = false;
             if (!res)
-                res = {error:{message:'Fail!'}};
+              res = {
+                error: {
+                  message: 'Fail!'
+                }
+              };
             scope.error = res.error;
             scope.errorMsg = res.error.message;
           });
@@ -61,7 +70,8 @@ angular.module('simpleforum')
         });
       };
 
-      $scope.signup = function (ev) {
+      // Requests the sign up
+      $scope.signup = function(ev) {
 
         function callback(scope, dialog) {
 
@@ -76,7 +86,7 @@ angular.module('simpleforum')
             isAdm: scope.isAdm
           }
 
-          UserServices.signup(data, function (res) {
+          UserServices.signup(data, function(res) {
 
             $localStorage.user = res.result;
 
@@ -85,12 +95,16 @@ angular.module('simpleforum')
 
             hasToken();
 
-          }, function (res) {
+          }, function(res) {
             $rootScope.error = 'Failed to signup';
 
             scope.loading = false;
             if (!res)
-                res = {error:{message:'Fail!'}};
+              res = {
+                error: {
+                  message: 'Fail!'
+                }
+              };
             scope.error = res.error;
             scope.errorMsg = res.error.message;
           });
@@ -106,7 +120,8 @@ angular.module('simpleforum')
         });
       };
 
-      $scope.logout = function () {
+      // Logs out
+      $scope.logout = function() {
 
         delete $localStorage.user;
 

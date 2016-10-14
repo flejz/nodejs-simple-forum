@@ -3,7 +3,7 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>SIMPE FORUM</title>
+    <title>SIMPE FORUM - QMágico Challenge</title>
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
   </head>
   <body ng-app="simpleforum" ng-controller="MainCtrl">
@@ -11,7 +11,7 @@
     <md-toolbar>
       <div class="md-toolbar-tools">
         <h2>
-          <span>SIMPLE FORUM</span>
+          <span ng-click="home()"><a style="cursor:pointer">SIMPLE FORUM</a ></span>
         </h2>
         <span flex></span>
         <md-button ng-show="token" aria-label="Log Out" ng-click="logout()">

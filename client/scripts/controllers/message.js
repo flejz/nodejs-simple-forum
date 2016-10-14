@@ -32,6 +32,7 @@ angular.module('simpleforum')
           scope.loading = true;
 
           var data = {
+            id_topic: $scope.topic.id,
             title: scope.data.title,
             description: scope.data.description
           }
@@ -47,7 +48,7 @@ angular.module('simpleforum')
 
             $rootScope.error = 'Failed to add the message';
 
-            $scope.loading = false;
+            scope.loading = false;
             if (!res)
               res = {
                 error: {
@@ -70,7 +71,7 @@ angular.module('simpleforum')
       }
 
       // Editing an existing message
-      $scope.edit = function(message) {
+      $scope.edit = function(ev, message) {
 
         function callback(scope, dialog) {
           scope.loading = true;
@@ -89,7 +90,7 @@ angular.module('simpleforum')
           }, function(res) {
 
             $rootScope.error = 'Failed to update the message';
-            $scope.loading = false;
+            scope.loading = false;
             if (!res)
               res = {
                 error: {
@@ -104,8 +105,9 @@ angular.module('simpleforum')
         // Shows the dialog
         $mdDialog.show({
           controller: DialogEvents(callback, Util.clone(message)),
-          templateUrl: 'partials/topic/item.html',
+          templateUrl: 'partials/message/item.html',
           parent: angular.element(document.body),
+          targetEvent: ev,
           clickOutsideToClose: false
         });
       }
@@ -123,10 +125,8 @@ angular.module('simpleforum')
           MessageServices.delete(message.id, function(res) {
 
             load();
-            scope.loading = false;
 
           }, function(res) {
-
             $rootScope.error = 'Failed to update the message';
           });
         });
