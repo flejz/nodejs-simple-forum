@@ -1,4 +1,4 @@
-module.exports = function (seneca) {
+module.exports = function(seneca) {
   'use strict'
 
   const router = require('express').Router()
@@ -12,7 +12,7 @@ module.exports = function (seneca) {
   router.get('/',
     auth.parseHeader,
     auth.parseToken,
-    function (req, res) {
+    function(req, res) {
 
       // Gets all the topics
       seneca.act('role:topic,cmd:all', (err, topics) => {
@@ -35,7 +35,7 @@ module.exports = function (seneca) {
   router.post('/',
     auth.parseHeader,
     auth.parseToken,
-    function (req, res) {
+    function(req, res) {
 
       // Adds the topic
       seneca.act('role:topic,cmd:add', {
@@ -61,7 +61,7 @@ module.exports = function (seneca) {
   router.put('/',
     auth.parseHeader,
     auth.parseToken,
-    function (req, res) {
+    function(req, res) {
 
       // Updates the topic
       seneca.act('role:topic,cmd:update', {
@@ -77,58 +77,41 @@ module.exports = function (seneca) {
           }, err ? 500 : 404)
         }
 
-        seneca.act('role:message,cmd:by_topic', {
-          id_topic: topic.id
-        }, (err, messages) => {
+        topic.canDelete = user.isAdm || req.user.id == topic.id_user
+        topic.canEdit = req.user.id == topic.id_user
 
-          if (err) {
-            return error.handle(res, err)
-          }
-
-          let user = req.user
-
-          topic.canModify = user.isAdm || user.id == topic.id_user
-          topic.canEdit = user.id == topic.id_user
-          topic.messages = messages
-          topic.messages.forEach(message => {
-            message.canDelete = user.isAdm || user.id ==
-              message.id_user
-            message.canEdit = user.id == message.id_user
-          })
-
-          return res.json({
-            result: topic
-          })
+        return res.json({
+          result: topic
         })
 
       })
     })
 
-    /**
-     * Deletes a specific topic by id
-     * @route DELETE topic/ID
-     */
-    router.delete('/',
-      auth.parseHeader,
-      auth.parseToken,
-      function (req, res) {
+  /**
+   * Deletes a specific topic by id
+   * @route DELETE topic/ID
+   */
+  router.delete('/',
+    auth.parseHeader,
+    auth.parseToken,
+    function(req, res) {
 
-        seneca.act('role:topic,cmd:del', {
-          id: req.query.id,
-          id_user: req.user.id
-        }, err => {
+      seneca.act('role:topic,cmd:del', {
+        id: req.query.id,
+        id_user: req.user.id
+      }, err => {
 
-          if (err) {
-            return error.handle(res, err)
+        if (err) {
+          return error.handle(res, err)
+        }
+
+        return res.json({
+          result: {
+            success: true
           }
-
-          return res.json({
-            result: {
-              success: true
-            }
-          })
         })
       })
+    })
 
   /**
    * Gets a specific topic by id
@@ -137,7 +120,7 @@ module.exports = function (seneca) {
   router.get('/:id',
     auth.parseHeader,
     auth.parseToken,
-    function (req, res) {
+    function(req, res) {
 
       seneca.act('role:topic,cmd:get', {
         id: req.params.id
