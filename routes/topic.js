@@ -18,7 +18,7 @@ module.exports = function (seneca) {
       seneca.act('role:topic,cmd:all', (err, topics) => {
 
         topics.forEach(topic => {
-          topic.canModify = req.user.isAdm || req.user.id == topic.id_user
+          topic.canDelete = req.user.isAdm || req.user.id == topic.id_user
           topic.canEdit = req.user.id == topic.id_user
         })
 
@@ -159,11 +159,13 @@ module.exports = function (seneca) {
 
           let user = req.user
 
-          topic.canModify = user.isAdm || user.id == topic.id_user
+          topic.canDelete = req.user.isAdm || req.user.id == topic.id_user
+          topic.canEdit = req.user.id == topic.id_user
           topic.messages = messages
           topic.messages.forEach(message => {
-            messages.canModify = user.isAdm || user.id ==
+            message.canDelete = user.isAdm || user.id ==
               message.id_user
+            message.canEdit = user.id == message.id_user
           })
 
           return res.json({
