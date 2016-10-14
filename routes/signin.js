@@ -4,8 +4,14 @@ module.exports = function(seneca) {
   const router = require('express').Router()
 
   /**
-   * Signs in an existing user
-   * @route signin/
+   * @api {post} /signin/ Signs in a new user
+   * @apiGroup User
+
+   * @apiParam {String} username The username.
+   * @apiParam {String} password The password.
+
+   * @apiSuccess {Object}  result The user information
+   * @apiSuccess {String}  result.token The user access token.
    */
   router.post('/', function(req, res) {
 

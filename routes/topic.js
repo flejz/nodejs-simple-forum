@@ -6,8 +6,14 @@ module.exports = function(seneca) {
   const error = require('../app.error')()
 
   /**
-   * Gets all topics
-   * @route GET topic/
+   * @api {get} /topic/ Gets all the topics
+   * @apiGroup Topic
+
+   * @apiHeader {String} Authorization Authorization bearer token.
+   * @apiHeaderExample {json} Request-Example:
+   *             { "authorization": "tag token" }
+
+   * @apiSuccess {Object}  result The topic list
    */
   router.get('/',
     auth.parseHeader,
@@ -29,8 +35,17 @@ module.exports = function(seneca) {
     })
 
   /**
-   * Inserts a new topic
-   * @route POST topic/
+   * @api {post} /topic/ Inserts a topic
+   * @apiGroup Topic
+
+   * @apiHeader {String} Authorization Authorization bearer token.
+   * @apiHeaderExample {json} Request-Example:
+   *             { "authorization": "tag token" }
+
+   * @apiParam {String} title The title.
+   * @apiParam {String} description The description.
+
+   * @apiSuccess {Object}  result The topic
    */
   router.post('/',
     auth.parseHeader,
@@ -55,8 +70,18 @@ module.exports = function(seneca) {
     })
 
   /**
-   * Updates a topic
-   * @route POST topic/
+   * @api {put} /topic/ Updates a topic
+   * @apiGroup Topic
+
+   * @apiHeader {String} Authorization Authorization bearer token.
+   * @apiHeaderExample {json} Request-Example:
+   *             { "authorization": "tag token" }
+
+   * @apiParam {String} id The topic id.
+   * @apiParam {String} title The title.
+   * @apiParam {String} description The description.
+
+   * @apiSuccess {Object}  result The topic
    */
   router.put('/',
     auth.parseHeader,
@@ -88,8 +113,16 @@ module.exports = function(seneca) {
     })
 
   /**
-   * Deletes a specific topic by id
-   * @route DELETE topic/ID
+   * @api {delete} /topic/ Deletes a topic
+   * @apiGroup Topic
+
+   * @apiHeader {String} Authorization Authorization bearer token.
+   * @apiHeaderExample {json} Request-Example:
+   *             { "authorization": "tag token" }
+
+   * @apiParam {String} id The topic id.
+
+   * @apiSuccess {Object}  result The success confirmation
    */
   router.delete('/',
     auth.parseHeader,
@@ -114,8 +147,16 @@ module.exports = function(seneca) {
     })
 
   /**
-   * Gets a specific topic by id
-   * @route GET topic/ID
+   * @api {get} /topic/:id Gets a topic by id
+   * @apiGroup Topic
+
+   * @apiHeader {String} Authorization Authorization bearer token.
+   * @apiHeaderExample {json} Request-Example:
+   *             { "authorization": "tag token" }
+
+   * @apiParam {String} id The topic id.
+
+   * @apiSuccess {Object}  result The topic and all the relationes messages
    */
   router.get('/:id',
     auth.parseHeader,

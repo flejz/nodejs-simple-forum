@@ -5,8 +5,17 @@ module.exports = function (seneca) {
   const error = require('../app.error')()
 
   /**
-   * Signs up a new user
-   * @route signup/
+   * @api {post} /signup/ Signs up a new user
+   * @apiGroup User
+
+   * @apiParam {String} name The name of the user.
+   * @apiParam {String} username The username.
+   * @apiParam {String} password The password.
+   * @apiParam {String} passwordMatch The password confirmation.
+   * @apiParam {Boolean} isAdm If the user is an administrator.
+
+   * @apiSuccess {Object}  result The user information
+   * @apiSuccess {String}  result.token The user access token.
    */
   router.post('/', function (req, res, next) {
 

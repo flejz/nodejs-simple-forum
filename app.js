@@ -48,6 +48,11 @@ app.use('/signup', signup)
 app.use('/topic', topic)
 app.use('/message', message)
 
+// Static path to documentation
+app.use(express.static(path.join(__dirname, 'apidoc')))
+app.get('/', (req, res) =>{
+  res.render('apidoc/index.html')
+})
 
 // Exporting module
 module.exports = app
