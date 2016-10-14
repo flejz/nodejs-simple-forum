@@ -5,9 +5,12 @@
       <span>Topic: <b>{{ topic.title }}</b></span>
     </h2>
   <span flex></span>
-   <md-button class="md-raised" aria-label="New Message" ng-click="new($event)">
-     New Message
-   </md-button>
+    <md-button aria-label="Back to Topics" ng-click="home()">
+      Back to Topics
+    </md-button>
+    <md-button class="md-raised" aria-label="New Message" ng-click="new($event)">
+      New Message
+    </md-button>
    <md-button ng-hide="true" aria-label="None"/>
  </div>
 </md-toolbar>
