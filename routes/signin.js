@@ -21,7 +21,10 @@ module.exports = function(seneca) {
           }
         })
       }
-      res.json(user)
+
+      res.json({
+        result: user
+      })
     })
   })
 

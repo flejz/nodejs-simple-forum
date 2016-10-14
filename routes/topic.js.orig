@@ -18,8 +18,12 @@ module.exports = function (seneca) {
       seneca.act('role:topic,cmd:all', (err, topics) => {
 
         topics.forEach(topic => {
-          topic.canModify = req.user.isAdm || req.user.id == topic.id_user
+<<<<<<< HEAD
+          topic.canDelete = req.user.isAdm || req.user.id == topic.id_user
           topic.canEdit = req.user.id == topic.id_user
+=======
+          topic.canModify = req.user.isAdm || req.user.id == topic.id_user
+>>>>>>> 3e7b8ac9796aa429f86cb05f546c2b757899508f
         })
 
         return res.json({
@@ -87,11 +91,18 @@ module.exports = function (seneca) {
 
           let user = req.user
 
-          topic.canModify = user.isAdm || user.id == topic.id_user
+<<<<<<< HEAD
+          topic.canDelete = user.isAdm || user.id == topic.id_user
           topic.canEdit = user.id == topic.id_user
           topic.messages = messages
           topic.messages.forEach(message => {
             message.canDelete = user.isAdm || user.id ==
+=======
+          topic.canModify = user.isAdm || user.id == topic.id_user
+          topic.messages = messages
+          topic.messages.forEach(message => {
+            messages.canModify = user.isAdm || user.id ==
+>>>>>>> 3e7b8ac9796aa429f86cb05f546c2b757899508f
               message.id_user
             message.canEdit = user.id == message.id_user
           })

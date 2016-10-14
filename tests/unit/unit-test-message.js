@@ -28,19 +28,6 @@ describe('When requesting all the messages by topic', () => {
       done()
     })
   })
-  it('should retrieve the main_message as first', (done) => {
-
-    seneca.act('role:message,cmd:by_topic', {
-      id_topic: '1'
-    }, (err, messages) => {
-
-      if (err)
-        return done(err)
-
-      assert.ok(messages[0].main_message)
-      done()
-    })
-  })
 })
 
 describe('When an user or adm tries to add a message', () => {
@@ -49,8 +36,7 @@ describe('When an user or adm tries to add a message', () => {
 
       seneca.act('role:message,cmd:add', {
         description: 'Rails Sinatra',
-        id_user: 'he',
-        main_message: true
+        id_user: 'he'
       }, (err, message) => {
 
         if (err)
@@ -67,8 +53,7 @@ describe('When an user or adm tries to add a message', () => {
         title: 'Node.js Message',
         description: 'Test',
         id_user: 'she',
-        id_topic: '1',
-        main_message: false
+        id_topic: '1'
       }, (err, message) => {
 
         if (err)

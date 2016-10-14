@@ -22,7 +22,7 @@ before((done) => {
   })
 })
 
-
+// Message deletion
 describe('When an user tries to delete a message', () => {
   describe('And the message is not from himself', () => {
     it('should return an exception', (done) => {
@@ -72,7 +72,7 @@ describe('When an adm tries to delete a message', () => {
   })
 })
 
-
+// Topic deletion
 describe('When an user tries to delete a topic', () => {
   describe('And the topic is not from himself', () => {
     it('should return an exception', (done) => {
@@ -97,8 +97,6 @@ describe('When an user tries to delete a topic', () => {
         id_user: 'he'
       }, (err, topic) => {
 
-        console.log(err);
-
         if (err)
           return done(err)
 
@@ -115,9 +113,6 @@ describe('When an adm tries to delete a topic', () => {
       id: '2',
       id_user: 'me'
     }, (err, topic) => {
-
-
-              console.log(err);
 
       if (err)
         return done(err)

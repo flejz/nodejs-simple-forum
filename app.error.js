@@ -14,7 +14,7 @@ module.exports = function auth() {
 
       return res.status(status || 500).json({
         error: {
-          message: err.details ? err.details.message : err.message
+          message: err.details ? err.details.message : (err.msg ? err.msg :err.message)
         }
       })
     }

@@ -1,0 +1,58 @@
+<md-dialog aria-label="Mango (Fruit)">
+  <form ng-cloak>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Topic</h2>
+      </div>
+    </md-toolbar>
+    <md-toolbar class="md-warn" ng-show="!!error">
+      <div class="md-toolbar-tools">
+        <h2>{{error.message}}</h2>
+      </div>
+    </md-toolbar>
+    <md-progress-linear md-mode="indeterminate" class="md-accent" ng-show="loading"></md-progress-linear>
+    <md-dialog-content>
+      <md-content layout-padding>
+        <form name="topicForm">
+
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Title</label>
+            <input ng-disabled="loading" required name="title" ng-model="data.title" />
+
+            <div ng-messages="topicForm.title.$error">
+              <div ng-message="required">Title is required.</div>
+            </div>
+          </md-input-container>
+
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Description</label>
+            <input ng-disabled="loading" required name="description" ng-model="data.description" />
+
+            <div ng-messages="topicForm.description.$error">
+              <div ng-message="required">Description is required.</div>
+            </div>
+          </md-input-container>
+
+          <md-input-container class="md-block">
+            <label>Message</label>
+            <textarea ng-disabled="loading" required name="message" ng-model="data.message" md-maxlength="150" rows="3" md-select-on-focus></textarea>
+
+            <div ng-messages="topicForm.message.$error">
+              <div ng-message="required">Message is required.</div>
+            </div>
+          </md-input-container>
+
+        </form>
+      </md-content>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <md-button class="md-raised" ng-disabled="!data.title || !data.description || !data.message || loading" ng-click="answer()">
+       Add
+      </md-button>
+      <span flex></span>
+      <md-button class="md-warn" ng-disabled="loading" ng-click="cancel()">
+       Cancel
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

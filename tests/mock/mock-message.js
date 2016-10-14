@@ -6,22 +6,19 @@ module.exports = function(seneca) {
     title: 'Message Node.js',
     description: 'Express Jade',
     id_user: 'me',
-    id_topic: '1',
-    main_message: true
+    id_topic: '1'
   }, {
     id: '2',
     title: 'Message Python',
     description: 'Flask Django',
     id_user: 'she',
-    id_topic: '2',
-    main_message: true
+    id_topic: '2'
   }, {
     id: '3',
     title: 'Message Ruby',
     description: 'Rails Sinatra',
     id_user: 'he',
-    id_topic: '3',
-    main_message: true
+    id_topic: '3'
   }]
 
   // Mock message
@@ -34,7 +31,6 @@ module.exports = function(seneca) {
       message.description = msg.description
       message.id_user = msg.id_user
       message.id_topic = msg.id_topic
-      message.main_message = msg.main_message
       message.date = new Date()
 
       message.save$(function(err, obj) {
