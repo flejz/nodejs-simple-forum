@@ -24,10 +24,10 @@
       <h3>{{ topic.title }}</h3>
       <p>{{ topic.description }}</p>
     </div>
-    <md-button class="md-raised" ng-click="edit(topic)" ng-show="topic.canModify">
+    <md-button class="md-raised" ng-click="edit(topic)" ng-show="topic.canEdit">
       Edit
     </md-button>
-    <md-button class="md-warn" ng-click="delete(topic)" ng-show="topic.canModify">
+    <md-button class="md-warn" ng-click="delete(topic)" ng-show="topic.canDelete">
       Delete
     </md-button>
     <md-divider ></md-divider>
