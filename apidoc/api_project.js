@@ -1,12 +1,12 @@
 define({
-  "name": "Node Simple Forum",
+  "name": "Node Simple Forum API",
   "version": "1.1.0",
-  "description": "Simple forum application API",
+  "description": "Short API Documentation",
   "sampleUrl": false,
   "apidoc": "0.2.0",
   "generator": {
     "name": "apidoc",
-    "time": "2016-10-14T19:54:10.125Z",
+    "time": "2016-10-14T20:07:11.121Z",
     "url": "http://apidocjs.com",
     "version": "0.16.1"
   }
